@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Jogo de Plataforma</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        // Create a custom import map to ensure .js extensions are used
+        const importMap = document.createElement('script');
+        importMap.type = 'importmap';
+        importMap.textContent = JSON.stringify({
+            "imports": {
+                "./dist/JumperEnemy": "./dist/JumperEnemy.js",
+                "./dist/FlyerEnemy": "./dist/FlyerEnemy.js",
+                "./dist/ThrowerEnemy": "./dist/ThrowerEnemy.js",
+                "./dist/WalkerEnemy": "./dist/WalkerEnemy.js",
+                "./dist/GameController": "./dist/GameController.js",
+                "./dist/GameRenderer": "./dist/GameRenderer.js",
+                "./dist/Player": "./dist/Player.js",
+                "./dist/Platform": "./dist/Platform.js",
+                "./dist/EnemyType": "./dist/EnemyType.js",
+                "./dist/EnemyObject": "./dist/EnemyObject.js",
+                "./dist/Projectile": "./dist/Projectile.js",
+                "./dist/KeyState": "./dist/KeyState.js",
+                "./dist/CollisionUtils": "./dist/CollisionUtils.js",
+                "./dist/ProjectileUtils": "./dist/ProjectileUtils.js",
+                "./dist/GameObject": "./dist/GameObject.js"
+            }
+        });
+        document.head.appendChild(importMap);
+    </script>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    <script type="module" src="dist/game.js"></script>
+</body>
+</html>

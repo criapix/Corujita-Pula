@@ -1,0 +1,25 @@
+# Dependências
+node_modules/
+
+# Build
+/dist
+
+# Ambiente
+.env
+.env.local
+.env.development
+.env.production
+
+# IDEs
+.vscode/
+.idea/
+
+# Sistemas operacionais
+Thumbs.db
+.DS_Store
+
+# Logs
+*.log
+
+# Arquivos temporários
+*.tmp

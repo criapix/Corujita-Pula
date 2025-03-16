@@ -1,0 +1,13 @@
+{
+  "name": "coruja-game",
+  "version": "1.0.0",
+  "description": "Jogo de Plataforma em TypeScript",
+  "main": "dist/game.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.5"
+  }
+}

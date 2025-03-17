@@ -36,6 +36,9 @@ export class GameController {
         this.gravity = gravity;
         this.worldWidth = worldWidth;
         this.fireballCooldown = fireballCooldown;
+        
+        // Listen for playerHit event from projectiles
+        document.addEventListener('playerHit', () => this.resetGame());
     }
     
     // Main update function
@@ -132,7 +135,7 @@ export class GameController {
                     this.player.velocityY = this.player.jumpForce * 0.7; // Bounce player up a bit
                 } else {
                     // Player collided with enemy from side or below
-                    this.resetPlayerPosition();
+                    this.resetGame(); // Reset the entire game state
                 }
             }
         }
@@ -143,6 +146,33 @@ export class GameController {
         this.player.x = 50;
         this.player.y = 100;
         this.cameraOffset = 0;
+    }
+    
+    // Reset the entire game state
+    private resetGame(): void {
+        // Reset player position
+        this.resetPlayerPosition();
+        
+        // Clear all projectiles
+        GameController.projectiles.length = 0;
+        
+        // Reset all enemies to their initial state
+        this.enemies.forEach(enemy => {
+            enemy.alive = true;
+            
+            // Reset enemy-specific properties
+            if ('velocityY' in enemy) {
+                (enemy as any).velocityY = 0;
+            }
+            
+            if ('lastThrowTime' in enemy) {
+                (enemy as any).lastThrowTime = 0;
+            }
+            
+            if ('time' in enemy) {
+                (enemy as any).time = 0;
+            }
+        });
     }
     
     // Update all enemies

@@ -74,10 +74,8 @@ export function updateProjectiles(projectiles: Projectile[], platforms: Platform
         
         // Check for collision with player (only for enemy projectiles)
         if (!projectile.isFireball && projectile.active && collision(projectile, player)) {
-            // Reset player position
-            player.x = 50;
-            player.y = 100;
-            cameraOffset = 0;
+            // Signal that player was hit by projectile
+            document.dispatchEvent(new CustomEvent('playerHit'));
             projectiles.splice(i, 1); // Remove projectile
             break;
         }

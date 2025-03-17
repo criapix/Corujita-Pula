@@ -4,8 +4,9 @@
   "description": "Jogo de Plataforma em TypeScript",
   "main": "dist/game.js",
   "scripts": {
-    "build": "tsc",
-    "start": "http-server . -c-1 --cors"
+    "build": "tsc && node scripts/generate-import-map.js",
+    "start": "http-server . -c-1 --cors",
+    "generate-import-map": "node scripts/generate-import-map.js"
   },
   "devDependencies": {
     "typescript": "^4.9.5",

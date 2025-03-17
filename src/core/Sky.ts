@@ -103,10 +103,8 @@ export class Sky {
             // This ensures clouds don't disappear until they're fully off-screen
             if (adjustedX + cloud.width > parallaxCameraOffset - cloud.width && 
                 adjustedX < parallaxCameraOffset + this.ctx.canvas.width + cloud.width) {
-//                this.drawCloud(cloud);
+                this.drawCloud(cloud);
             }
-            this.drawCloud(cloud);
-
         });
         
         this.ctx.restore();

@@ -1,8 +1,8 @@
-import { Projectile } from './Projectile.js';
-import { Platform } from './Platform.js';
-import { Player } from './Player.js';
-import { EnemyObject } from './EnemyObject.js';
-import { collision } from './CollisionUtils.js';
+import { Projectile } from '../Projectile';
+import { Platform } from '../Platform';
+import { Player } from '../core/Player';
+import { EnemyObject } from '../enemies/EnemyObject';
+import { collision } from './CollisionUtils';
 
 // Function to shoot fireball
 export function shootFireball(player: Player, projectiles: Projectile[], lastDirection: number, lastFireballTime: number, fireballCooldown: number): number {

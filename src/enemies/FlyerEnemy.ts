@@ -1,7 +1,7 @@
-import { EnemyObject } from './EnemyObject.js';
-import { Player } from './Player.js';
-import { WalkerEnemy } from './WalkerEnemy.js';
-import { EnemyType } from './EnemyType.js';
+import { EnemyObject } from './EnemyObject';
+import { Player } from '../core/Player';
+import { WalkerEnemy } from './WalkerEnemy';
+import { EnemyType } from './EnemyType';
 
 // Additional properties for flyer enemy type
 export interface FlyerEnemy extends EnemyObject {
@@ -15,7 +15,7 @@ export interface FlyerEnemy extends EnemyObject {
 export const FlyerEnemyImpl: FlyerEnemy = {
     ...WalkerEnemy,
     type: EnemyType.FLYER,
-    spritePath: 'assets/images/parrot-svgrepo-com.svg',
+    spritePath: 'assets/images/butterfly-insect-svgrepo-com.svg',
     amplitude: 100,  // Vertical movement range
     frequency: 0.02, // Speed of oscillation
     initialY: 0,     // Starting Y position

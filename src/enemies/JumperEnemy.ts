@@ -1,7 +1,7 @@
-import { EnemyObject } from './EnemyObject.js';
-import { Player } from './Player.js';
-import { WalkerEnemy } from './WalkerEnemy.js';
-import { EnemyType } from './EnemyType.js';
+import { EnemyObject } from './EnemyObject';
+import { Player } from '../core/Player';
+import { WalkerEnemy } from './WalkerEnemy';
+import { EnemyType } from './EnemyType';
 
 // Additional properties for jumper enemy type
 export interface JumperEnemy extends EnemyObject {

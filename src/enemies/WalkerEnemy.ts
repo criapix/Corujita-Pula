@@ -1,7 +1,7 @@
-import { EnemyObject } from './EnemyObject.js';
-import { EnemyType } from './EnemyType.js';
-import { Platform } from './Platform.js';
-import { Player } from './Player.js';
+import { EnemyObject } from './EnemyObject';
+import { EnemyType } from './EnemyType';
+import { Platform } from '../Platform';
+import { Player } from '../core/Player';
 
 // Base walker enemy template
 export const WalkerEnemy: EnemyObject = {

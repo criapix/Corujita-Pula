@@ -1,4 +1,4 @@
-import { GameObject } from './GameObject.js';
+import { GameObject } from './GameObject';
 
 // Player interface extending the base GameObject
 export interface Player extends GameObject {

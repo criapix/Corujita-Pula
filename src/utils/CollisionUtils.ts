@@ -1,6 +1,6 @@
-import { GameObject } from './GameObject.js';
-import { Player } from './Player.js';
-import { EnemyObject } from './EnemyObject.js';
+import { GameObject } from '../GameObject';
+import { Player } from '../core/Player';
+import { EnemyObject } from '../enemies/EnemyObject';
 
 // Collision detection between two game objects
 export function collision(rect1: GameObject, rect2: GameObject): boolean {

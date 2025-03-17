@@ -1,8 +1,8 @@
-import { Player } from './Player.js';
-import { Platform } from './Platform.js';
-import { EnemyObject } from './EnemyObject.js';
-import { Projectile } from './Projectile.js';
-import { GameController } from './GameController.js';
+import { Player } from './core/Player';
+import { Platform } from './Platform';
+import { EnemyObject } from './enemies/EnemyObject';
+import { Projectile } from './Projectile';
+import { GameController } from './core/GameController';
 
 
 // Class to handle all game rendering

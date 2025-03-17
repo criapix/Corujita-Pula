@@ -1,16 +1,13 @@
-import { Player } from './Player.js';
-import { Platform } from './Platform.js';
-import { EnemyType } from './EnemyType.js';
-import { EnemyObject } from './EnemyObject.js';
-import { JumperEnemy, JumperEnemyImpl } from './JumperEnemy.js';
-import { FlyerEnemy, FlyerEnemyImpl } from './FlyerEnemy.js';
-import { ThrowerEnemy, ThrowerEnemyImpl } from './ThrowerEnemy.js';
-import { Projectile } from './Projectile.js';
-import { KeyState } from './KeyState.js';
-import { WalkerEnemy } from './WalkerEnemy.js';
-import { GameController } from './GameController.js';
-import { GameRenderer } from './GameRenderer.js';
-import { collision } from './CollisionUtils.js';
+import { Player } from './core/Player';
+import { Platform } from './Platform';
+import { EnemyObject } from './enemies/EnemyObject';
+import { JumperEnemy, JumperEnemyImpl } from './enemies/JumperEnemy';
+import { FlyerEnemy, FlyerEnemyImpl } from './enemies/FlyerEnemy';
+import { ThrowerEnemy, ThrowerEnemyImpl } from './enemies/ThrowerEnemy';
+import { KeyState } from './KeyState';
+import { WalkerEnemy } from './enemies/WalkerEnemy';
+import { GameController } from './core/GameController';
+import { GameRenderer } from './GameRenderer';
 
 // Get canvas and context
 const canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
@@ -163,7 +160,7 @@ throwerEnemyImage.onload = (): void => {
     if(assetsLoaded === totalAssets) startGame();
 };
 throwerEnemyImage.onerror = (): void => alert('Error loading thrower enemy sprite');
-throwerEnemyImage.src = 'assets/images/panda-bear-panda-svgrepo-com.svg';
+throwerEnemyImage.src = 'assets/images/spider-svgrepo-com.svg';
 
 // Main game loop
 function gameLoop(): void {

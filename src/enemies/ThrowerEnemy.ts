@@ -1,9 +1,9 @@
-import { EnemyObject } from './EnemyObject.js';
-import { GameController } from './GameController.js';
-import { Projectile } from './Projectile.js';
-import { Player } from './Player.js';
-import { WalkerEnemy } from './WalkerEnemy.js';
-import { EnemyType } from './EnemyType.js';
+import { EnemyObject } from './EnemyObject';
+import { GameController } from '../core/GameController';
+import { Projectile } from '../Projectile';
+import { Player } from '../core/Player';
+import { WalkerEnemy } from './WalkerEnemy';
+import { EnemyType } from './EnemyType';
 
 // Additional properties for thrower enemy type
 export interface ThrowerEnemy extends EnemyObject {
@@ -16,7 +16,7 @@ export interface ThrowerEnemy extends EnemyObject {
 export const ThrowerEnemyImpl: ThrowerEnemy = {
     ...WalkerEnemy,
     type: EnemyType.THROWER,
-    spritePath: 'assets/images/panda-bear-panda-svgrepo-com.svg',
+    spritePath: 'assets/images/spider-svgrepo-com.svg',
     
     throwCooldown: 2000, // ms between throws
     lastThrowTime: 0,
@@ -43,16 +43,14 @@ export const ThrowerEnemyImpl: ThrowerEnemy = {
             currentTime - this.lastThrowTime > this.throwCooldown) {
             
             // Create new projectile
-            const projectile: Projectile = {
-                x: this.x + this.width / 2,
-                y: this.y + this.height / 2,
-                width: 16,
-                height: 16,
-                velocityX: (player.x > this.x) ? 7 : -7,
-                velocityY: Math.sin(-45 * Math.PI/180) * 10, // 45 degree angle upwards
-                isFireball: false,
-                active: true
-            };
+            const projectile = new Projectile(
+                this.x + this.width / 2,
+                this.y + this.height / 2,
+                (player.x > this.x) ? 7 : -7,
+                Math.sin(-45 * Math.PI/180) * 10,
+                true,
+                false
+            );
             
             GameController.projectiles.push(projectile);
             this.lastThrowTime = currentTime;

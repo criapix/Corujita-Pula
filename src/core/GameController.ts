@@ -1,10 +1,10 @@
-import { Player } from './Player.js';
-import { Platform } from './Platform.js';
-import { EnemyObject } from './EnemyObject.js';
-import { Projectile } from './Projectile.js';
-import { KeyState } from './KeyState.js';
-import { collision, checkTopCollision } from './CollisionUtils.js';
-import { updateProjectiles, shootFireball } from './ProjectileUtils.js';
+import { Player } from './Player';
+import { Platform } from '../Platform';
+import { EnemyObject } from '../enemies/EnemyObject';
+import { Projectile } from '../Projectile';
+import { KeyState } from '../KeyState';
+import { collision, checkTopCollision } from '../utils/CollisionUtils';
+import { updateProjectiles, shootFireball } from '../utils/ProjectileUtils';
 
 // Class to handle game logic and updates
 export class GameController {

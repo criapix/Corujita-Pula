@@ -1,7 +1,7 @@
-import { GameObject } from './GameObject.js';
-import { Platform } from './Platform.js';
-import { Player } from './Player.js';
-import { EnemyType } from './EnemyType.js';
+import { GameObject } from '../core/GameObject';
+import { Platform } from '../Platform';
+import { Player } from '../core/Player';
+import { EnemyType } from './EnemyType';
 
 // Base enemy interface
 export interface EnemyObject extends GameObject {

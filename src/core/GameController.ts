@@ -122,6 +122,11 @@ export class GameController {
         if (this.player.x >= this.worldWidth - this.player.width) {
             alert('Parabéns! Você completou a fase!');
             this.resetPlayerPosition();
+            
+            // Reset all key states to prevent keys from remaining pressed
+            Object.keys(this.keys).forEach(key => {
+                this.keys[key] = false;
+            });
         }
     }
     

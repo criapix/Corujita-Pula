@@ -51,7 +51,7 @@ npm run build
 npm start
 ```
 
-Acesse `http://localhost:3000` no seu navegador
+Acesse `http://localhost:8080` no seu navegador
 
 ## Créditos de Assets
 
@@ -72,16 +72,36 @@ Acesse `http://localhost:3000` no seu navegador
 
 ```
 ├── dist/               # Arquivos JavaScript compilados
-│   ├── game.js         # Código do jogo compilado
-│   └── game.js.map     # Mapa de origem para depuração
 ├── src/                # Código-fonte TypeScript
-│   └── game.ts         # Código principal do jogo
+│   ├── core/           # Componentes principais do jogo
+│   │   ├── EnemyRegistry.ts
+│   │   ├── GameController.ts
+│   │   ├── GameObject.ts
+│   │   ├── Player.ts
+│   │   └── Sky.ts
+│   ├── enemies/        # Tipos de inimigos
+│   │   ├── EnemyObject.ts
+│   │   ├── EnemyType.ts
+│   │   ├── FlyerEnemy.ts
+│   │   ├── JumperEnemy.ts
+│   │   ├── ThrowerEnemy.ts
+│   │   └── WalkerEnemy.ts
+│   ├── utils/          # Utilitários
+│   │   ├── CollisionUtils.ts
+│   │   └── ProjectileUtils.ts
+│   ├── GameObject.ts   # Classes base
+│   ├── GameRenderer.ts
+│   ├── KeyState.ts
+│   ├── Platform.ts
+│   ├── Projectile.ts
+│   └── game.ts         # Ponto de entrada principal
+├── assets/             # Recursos gráficos
+│   └── images/         # Sprites SVG
+├── tests/              # Testes unitários
+├── scripts/            # Scripts de build
 ├── index.html          # Página HTML principal
 ├── style.css           # Estilos CSS
-├── owl.svg             # Sprite do jogador (coruja)
-├── owl-back.svg        # Sprite dos inimigos
 ├── package.json        # Configuração do projeto Node.js
-├── package-lock.json   # Versões exatas das dependências
 └── tsconfig.json       # Configuração do TypeScript
 ```
 
@@ -96,11 +116,19 @@ Acesse `http://localhost:3000` no seu navegador
    ```
    npm run build
    ```
-4. Para desenvolvimento com recompilação automática:
+4. Inicie o servidor HTTP local:
    ```
-   npm run watch
+   npm start
    ```
-5. Abra o arquivo `index.html` em um navegador ou use um servidor HTTP local
+5. Acesse `http://localhost:8080` em seu navegador
+
+## Testes
+
+O projeto inclui testes unitários usando Jest. Para executar os testes:
+
+```bash
+npm test
+```
 
 ## Mecânicas de Jogo
 
@@ -116,6 +144,7 @@ Acesse `http://localhost:3000` no seu navegador
 
 - O mundo do jogo tem uma largura total de 5000 pixels.
 - Existem múltiplas plataformas distribuídas pelo mundo para o jogador navegar.
+- O céu apresenta nuvens em movimento com efeito de parallax.
 - O jogador vence ao chegar à extremidade direita do mundo.
 
 ### Inimigos
@@ -137,7 +166,6 @@ O jogo apresenta quatro tipos diferentes de inimigos, cada um com comportamento 
    - Não são limitados por plataformas
 
 4. **Atiradores (Throwers)**
-   - (param de atacar quando derrotadas)
    - Movem-se como os caminhantes
    - Lançam projéteis na direção do jogador quando está dentro do alcance
    - Os projéteis são afetados pela gravidade
@@ -147,8 +175,7 @@ O jogo apresenta quatro tipos diferentes de inimigos, cada um com comportamento 
 O jogador pode derrotar inimigos de duas maneiras:
 
 1. **Pular em cima**: Ao cair sobre um inimigo vindo de cima, o jogador o derrota e recebe um pequeno impulso para cima.
-2. **Bolas de Fogo**: Ao pressionar a tecla de espaço, o jogador lança uma bola de fogo que quica nas plataformas. Se a bola de fogo atingir um inimigo, ele é derrotado.
-   - As bolas de fogo são lançadas inicialmente para a direita, e depois na direção do último movimento do jogador (esquerda ou direita).
+2. **Bolas de Fogo**: Ao pressionar a tecla F, o jogador lança uma bola de fogo que quica nas plataformas. Se a bola de fogo atingir um inimigo, ele é derrotado.
 
 ### Colisões e Consequências
 
@@ -161,7 +188,7 @@ O jogador pode derrotar inimigos de duas maneiras:
 - **Seta Esquerda**: Move o jogador para a esquerda
 - **Seta Direita**: Move o jogador para a direita
 - **Seta Cima**: Faz o jogador pular (quando estiver no chão)
-- **Barra de Espaço**: Lança uma bola de fogo
+- **Tecla F**: Lança uma bola de fogo
 
 ## Implementação Técnica
 
@@ -194,20 +221,6 @@ O jogo utiliza `requestAnimationFrame` para criar um loop de jogo suave que atua
 
 A câmera segue o jogador horizontalmente, mantendo-o visível na tela enquanto ele se move pelo mundo. A implementação usa uma técnica de deslocamento de câmera (camera offset) que é aplicada durante a renderização.
 
-## Personalização
+## Contribuição
 
-O jogo pode ser facilmente personalizado modificando os seguintes aspectos:
-
-- **Plataformas**: Adicione ou modifique plataformas no array `platforms`
-- **Inimigos**: Adicione novos inimigos ou modifique os existentes no array `enemies`
-- **Física**: Ajuste constantes como `gravity`, `jumpForce` e `speed`
-- **Mundo**: Modifique `worldWidth` para alterar o tamanho do mundo
-- **Visuais**: Substitua os arquivos SVG por seus próprios sprites
-
-## Atualizações Recentes
-
-- Corrigido: Inimigos arremessadores agora param de atirar projéteis quando derrotados
-
-## Créditos
-
-- Sprite da coruja: SVG Repo (www.svgrepo.com)
+Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou enviar pull requests com melhorias ou correções.

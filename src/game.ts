@@ -8,6 +8,7 @@ import { KeyState } from './KeyState';
 import { WalkerEnemy } from './enemies/WalkerEnemy';
 import { GameController } from './core/GameController';
 import { GameRenderer } from './GameRenderer';
+import { EnemyRegistry } from './core/EnemyRegistry';
 
 // Get canvas and context
 const canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
@@ -16,15 +17,9 @@ const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 // Load game assets
 const playerImage = new Image();
 
-// Enemy images for different types
-const walkerEnemyImage = new Image();
-const jumperEnemyImage = new Image();
-const flyerEnemyImage = new Image();
-const throwerEnemyImage = new Image();
-
 // Track loaded assets
 let assetsLoaded = 0;
-const totalAssets = 5; // Player + 4 enemy types
+const totalAssets = 2; // Player + all enemy types (counted as 1)
 
 // Game constants
 const worldWidth = 5000;
@@ -93,6 +88,9 @@ document.addEventListener('keyup', (e: KeyboardEvent) => keys[e.key] = false);
 let gameController: GameController;
 let gameRenderer: GameRenderer;
 
+// Get enemy registry instance
+const enemyRegistry = EnemyRegistry.getInstance();
+
 // Start game when assets are loaded
 function startGame(): void {
     // Initialize controller and renderer
@@ -109,12 +107,7 @@ function startGame(): void {
     gameRenderer = new GameRenderer(
         ctx,
         playerImage,
-        new Map([
-            [WalkerEnemy.spritePath, walkerEnemyImage],
-            [JumperEnemyImpl.spritePath, jumperEnemyImage],
-            [FlyerEnemyImpl.spritePath, flyerEnemyImage],
-            [ThrowerEnemyImpl.spritePath, throwerEnemyImage]
-        ]),
+        enemyRegistry.getEnemySprites(),
         worldWidth
     );
     
@@ -130,37 +123,11 @@ playerImage.onload = (): void => {
 playerImage.onerror = (): void => alert('Error loading player sprite');
 playerImage.src = 'assets/images/owl.svg';
 
-// Walker enemy (fox)
-walkerEnemyImage.onload = (): void => {
+// Load all enemy sprites
+enemyRegistry.loadAllSprites(() => {
     assetsLoaded++;
     if(assetsLoaded === totalAssets) startGame();
-};
-walkerEnemyImage.onerror = (): void => alert('Error loading walker enemy sprite');
-walkerEnemyImage.src = 'assets/images/fox-svgrepo-com.svg';
-
-// Jumper enemy (frog)
-jumperEnemyImage.onload = (): void => {
-    assetsLoaded++;
-    if(assetsLoaded === totalAssets) startGame();
-};
-jumperEnemyImage.onerror = (): void => alert('Error loading jumper enemy sprite');
-jumperEnemyImage.src = 'assets/images/frog-svgrepo-com.svg';
-
-// Flyer enemy (butterfly)
-flyerEnemyImage.onload = (): void => {
-    assetsLoaded++;
-    if(assetsLoaded === totalAssets) startGame();
-};
-flyerEnemyImage.onerror = (): void => alert('Error loading flyer enemy sprite');
-flyerEnemyImage.src = 'assets/images/butterfly-insect-svgrepo-com.svg';
-
-// Thrower enemy (spider)
-throwerEnemyImage.onload = (): void => {
-    assetsLoaded++;
-    if(assetsLoaded === totalAssets) startGame();
-};
-throwerEnemyImage.onerror = (): void => alert('Error loading thrower enemy sprite');
-throwerEnemyImage.src = ThrowerEnemyImpl.spritePath;
+});
 
 // Main game loop
 function gameLoop(): void {

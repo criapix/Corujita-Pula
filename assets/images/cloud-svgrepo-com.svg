@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800px" height="800px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Cloud</title>
+    <g id="Cloud" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M18.5,17 C20.9852814,17 23,14.9852814 23,12.5 C23,10.0147186 20.9852814,8 18.5,8 C18.4177521,8 18.3358152,8.00196159 18.2542493,8.00583908 C17.4338913,5.64499358 15.1998368,4 12.5,4 C9.06372781,4 6.29246756,6.64293302 6.02761242,10.0125 C4.30973442,10.2152333 3,11.6892218 3,13.5 C3,15.4329966 4.56700338,17 6.5,17 L18.5,17 Z" id="Path" fill="#FFFFFF" fill-rule="nonzero"></path>
+    </g>
+</svg>

@@ -11,6 +11,10 @@ Um jogo 2D desenvolvido em TypeScript onde uma coruja deve navegar por plataform
   - Inimigos com comportamentos únicos
   - Sistema de projéteis
   - Plataformas dinâmicas
+- **Elementos Visuais**:
+  - Céu azul com nuvens em movimento
+  - Efeito de parallax para profundidade visual
+  - Inimigos com sprites únicos
 
 ## Tipos de Inimigos
 

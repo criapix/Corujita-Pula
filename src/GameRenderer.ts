@@ -3,6 +3,7 @@ import { Platform } from './Platform';
 import { EnemyObject } from './enemies/EnemyObject';
 import { Projectile } from './Projectile';
 import { GameController } from './core/GameController';
+import { Sky } from './core/Sky';
 
 
 // Class to handle all game rendering
@@ -11,6 +12,7 @@ export class GameRenderer {
     private playerImage: HTMLImageElement;
     private enemyImages: Map<string, HTMLImageElement>;
     private worldWidth: number;
+    private sky: Sky;
     
     constructor(
         ctx: CanvasRenderingContext2D, 
@@ -22,17 +24,19 @@ export class GameRenderer {
         this.playerImage = playerImage;
         this.enemyImages = enemyImages;
         this.worldWidth = worldWidth;
+        this.sky = new Sky(ctx, worldWidth, 15);
     }
     
     // Main draw function
     public draw(player: Player, platforms: Platform[], enemies: EnemyObject[], cameraOffset: number): void {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+        
+        // Draw sky and clouds with parallax effect
+        this.sky.update(cameraOffset);
+        this.sky.draw(cameraOffset);
+        
         this.ctx.save();
         this.ctx.translate(-cameraOffset, 0);
-        
-        // Draw world background
-        this.ctx.fillStyle = '#34495e';
-        this.ctx.fillRect(0, 0, this.worldWidth, this.ctx.canvas.height);
         
         // Draw player
         this.ctx.drawImage(this.playerImage, player.x, player.y, player.width, player.height);

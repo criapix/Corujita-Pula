@@ -68,42 +68,6 @@ Acesse `http://localhost:8080` no seu navegador
 ⚠️ Limitação atual - Colisões aéreas ainda em ajustes
 🔄 Em desenvolvimento - Sistema de pontuação e power-ups
 
-## Estrutura de Arquivos
-
-```
-├── dist/               # Arquivos JavaScript compilados
-├── src/                # Código-fonte TypeScript
-│   ├── core/           # Componentes principais do jogo
-│   │   ├── EnemyRegistry.ts
-│   │   ├── GameController.ts
-│   │   ├── GameObject.ts
-│   │   ├── Player.ts
-│   │   └── Sky.ts
-│   ├── enemies/        # Tipos de inimigos
-│   │   ├── EnemyObject.ts
-│   │   ├── EnemyType.ts
-│   │   ├── FlyerEnemy.ts
-│   │   ├── JumperEnemy.ts
-│   │   ├── ThrowerEnemy.ts
-│   │   └── WalkerEnemy.ts
-│   ├── utils/          # Utilitários
-│   │   ├── CollisionUtils.ts
-│   │   └── ProjectileUtils.ts
-│   ├── GameObject.ts   # Classes base
-│   ├── GameRenderer.ts
-│   ├── KeyState.ts
-│   ├── Platform.ts
-│   ├── Projectile.ts
-│   └── game.ts         # Ponto de entrada principal
-├── assets/             # Recursos gráficos
-│   └── images/         # Sprites SVG
-├── tests/              # Testes unitários
-├── scripts/            # Scripts de build
-├── index.html          # Página HTML principal
-├── style.css           # Estilos CSS
-├── package.json        # Configuração do projeto Node.js
-└── tsconfig.json       # Configuração do TypeScript
-```
 
 ## Instalação e Execução
 

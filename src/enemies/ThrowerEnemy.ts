@@ -52,6 +52,10 @@ export const ThrowerEnemyImpl: ThrowerEnemy = {
                 false
             );
             
+            // Set width and height for the projectile
+            projectile.width = 15;
+            projectile.height = 15;
+            
             GameController.projectiles.push(projectile);
             this.lastThrowTime = currentTime;
         }

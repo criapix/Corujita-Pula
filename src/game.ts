@@ -110,10 +110,10 @@ function startGame(): void {
         ctx,
         playerImage,
         new Map([
-            ['assets/images/fox-svgrepo-com.svg', walkerEnemyImage],
-            ['assets/images/frog-svgrepo-com.svg', jumperEnemyImage],
-            ['assets/images/butterfly-insect-svgrepo-com.svg', flyerEnemyImage],
-            ['assets/images/spider-svgrepo-com.svg', throwerEnemyImage]
+            [WalkerEnemy.spritePath, walkerEnemyImage],
+            [JumperEnemyImpl.spritePath, jumperEnemyImage],
+            [FlyerEnemyImpl.spritePath, flyerEnemyImage],
+            [ThrowerEnemyImpl.spritePath, throwerEnemyImage]
         ]),
         worldWidth
     );
@@ -160,7 +160,7 @@ throwerEnemyImage.onload = (): void => {
     if(assetsLoaded === totalAssets) startGame();
 };
 throwerEnemyImage.onerror = (): void => alert('Error loading thrower enemy sprite');
-throwerEnemyImage.src = 'assets/images/spider-svgrepo-com.svg';
+throwerEnemyImage.src = ThrowerEnemyImpl.spritePath;
 
 // Main game loop
 function gameLoop(): void {

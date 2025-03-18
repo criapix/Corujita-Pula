@@ -5,12 +5,15 @@
   "main": "dist/game.js",
   "scripts": {
     "build": "tsc && node scripts/generate-import-map.js",
-    "start": "http-server . -c-1 --cors",
+    "start": "tsc && node scripts/generate-import-map.js && http-server . -c-1 --cors",
+    "dev": "concurrently \"tsc --watch\" \"node scripts/generate-import-map.js\" \"browser-sync start --server --files 'dist/**/*.js, index.html, style.css' --no-notify\"",
     "generate-import-map": "node scripts/generate-import-map.js",
     "test": "jest"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
+    "browser-sync": "^2.29.3",
+    "concurrently": "^8.2.2",
     "http-server": "^14.1.1",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",

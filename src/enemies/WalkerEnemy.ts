@@ -14,10 +14,11 @@ export const WalkerEnemy: EnemyObject = {
     platform: null,
     type: EnemyType.WALKER,
     alive: true,
-    spritePath: 'assets/images/fox-svgrepo-com.svg', // Initialize as alive
+    spritePath: 'assets/images/fox-svgrepo-com.svg',
     update: function(player: Player): void {
         if (!this.alive) return; // Skip update if enemy is dead
         
+        // Move in current direction
         this.x += this.speed * this.direction;
         
         // Reverse direction at platform edges
@@ -25,6 +26,13 @@ export const WalkerEnemy: EnemyObject = {
             (this.x <= this.platform.x || 
             this.x + this.width >= this.platform.x + this.platform.width)) {
             this.direction *= -1;
+            
+            // Move slightly away from the edge to prevent getting stuck
+            if (this.direction === 1) {
+                this.x = this.platform.x + 1; // Move right from left edge
+            } else {
+                this.x = this.platform.x + this.platform.width - this.width - 1; // Move left from right edge
+            }
         }
     }
 };

@@ -15,6 +15,7 @@ export class GameController {
     private keys: KeyState;
     private gravity: number;
     private worldWidth: number;
+    private worldHeight: number;
     private cameraOffset: number = 0;
     private lastFireballTime: number = 0;
     private fireballCooldown: number;
@@ -35,6 +36,7 @@ export class GameController {
         this.keys = keys;
         this.gravity = gravity;
         this.worldWidth = worldWidth;
+        this.worldHeight = 800; // Set to match the worldHeight in game.ts
         this.fireballCooldown = fireballCooldown;
         
         // Listen for playerHit event from projectiles
@@ -50,6 +52,7 @@ export class GameController {
         this.updateCamera(canvasWidth);
         this.checkWinCondition();
         this.checkEnemyCollisions();
+        this.checkFallDeath();
         this.updateEnemies();
         this.updateProjectiles();
     }
@@ -201,5 +204,16 @@ export class GameController {
     // Getter for camera offset
     public getCameraOffset(): number {
         return this.cameraOffset;
+    }
+    
+    // Check if player has fallen into a gap/pit
+    private checkFallDeath(): void {
+        // If player falls below the bottom of the screen, consider it a death
+        const deathY = this.worldHeight - 100; // Allow some buffer before triggering death
+        
+        if (this.player.y > deathY) {
+            // Player has fallen into a gap
+            this.resetGame();
+        }
     }
 }

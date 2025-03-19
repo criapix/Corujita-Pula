@@ -1,14 +1,14 @@
 import { Player } from './core/Player';
 import { Platform } from './Platform';
 import { EnemyObject } from './enemies/EnemyObject';
-import { JumperEnemy, JumperEnemyImpl } from './enemies/JumperEnemy';
-import { FlyerEnemy, FlyerEnemyImpl } from './enemies/FlyerEnemy';
-import { ThrowerEnemy, ThrowerEnemyImpl } from './enemies/ThrowerEnemy';
+import { JumperEnemy } from './enemies/JumperEnemy';
+import { FlyerEnemy } from './enemies/FlyerEnemy';
+import { ThrowerEnemy } from './enemies/ThrowerEnemy';
 import { KeyState } from './KeyState';
-import { WalkerEnemy } from './enemies/WalkerEnemy';
 import { GameController } from './core/GameController';
 import { GameRenderer } from './GameRenderer';
 import { EnemyRegistry } from './core/EnemyRegistry';
+import { Stage1 } from './stages/Stage1';
 
 // Get canvas and context
 const canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
@@ -22,9 +22,13 @@ let assetsLoaded = 0;
 const totalAssets = 2; // Player + all enemy types (counted as 1)
 
 // Game constants
-const worldWidth = 5000;
-const gravity = 0.5;
 const fireballCooldown = 500; // Cooldown in milliseconds between fireballs
+
+// Load the first stage
+const currentStage = new Stage1();
+const worldWidth = currentStage.getWorldWidth();
+const worldHeight = currentStage.getWorldHeight();
+const gravity = currentStage.getGravity();
 
 // Configure canvas
 canvas.width = 800;
@@ -42,43 +46,19 @@ const player: Player = {
     isGrounded: false
 };
 
-const platforms: Platform[] = [
-    {x: 0, y: canvas.height - 40, width: worldWidth, height: 40},
-    {x: 500, y: 500, width: 200, height: 20},
-    {x: 1200, y: 400, width: 150, height: 20},
-    {x: 1800, y: 300, width: 200, height: 20},
-    // Novas plataformas
-    {x: 2300, y: 450, width: 180, height: 20},
-    {x: 2700, y: 350, width: 150, height: 20},
-    {x: 3000, y: 500, width: 200, height: 20},
-    {x: 3300, y: 400, width: 120, height: 20},
-    {x: 3600, y: 300, width: 180, height: 20},
-    {x: 4000, y: 350, width: 150, height: 20},
-    {x: 4300, y: 250, width: 200, height: 20},
-    {x: 4600, y: 350, width: 180, height: 20}
-];
+// Get platforms and enemies from the stage
+const platforms: Platform[] = currentStage.getPlatforms();
+const enemies: (EnemyObject | JumperEnemy | FlyerEnemy | ThrowerEnemy)[] = currentStage.getEnemies();
+
+// Debug: Log platform count
+console.log(`Loaded ${platforms.length} platforms from Stage1`);
+// Debug: Log a few platforms
+if (platforms.length > 0) {
+    console.log('First platform:', platforms[0]);
+    console.log('Last platform:', platforms[platforms.length - 1]);
+}
 
 const keys: KeyState = {};
-
-// Initialize enemies on platforms with different types
-const enemies: (EnemyObject | JumperEnemy | FlyerEnemy | ThrowerEnemy)[] = [
-    // Walkers (original behavior)
-    {...WalkerEnemy, x: 600, y: 450, platform: platforms[1], alive: true},
-    {...WalkerEnemy, x: 3050, y: 450, platform: platforms[6], alive: true},
-    
-    // Jumpers
-    {...JumperEnemyImpl, x: 1250, y: 350, platform: platforms[2], alive: true},
-    {...JumperEnemyImpl, x: 2750, y: 300, platform: platforms[5], alive: true},
-    
-    // Flyers
-    {...FlyerEnemyImpl, x: 1850, y: 250, initialY: 250, platform: null, alive: true},
-    {...FlyerEnemyImpl, x: 3650, y: 200, initialY: 200, platform: null, alive: true},
-    
-    // Throwers
-    {...ThrowerEnemyImpl, x: 2350, y: 400, platform: platforms[4], alive: true},
-    {...ThrowerEnemyImpl, x: 4050, y: 300, platform: platforms[9], alive: true},
-    {...ThrowerEnemyImpl, x: 4350, y: 200, platform: platforms[10], alive: true}
-];
 
 // Event listeners for controls
 document.addEventListener('keydown', (e: KeyboardEvent) => keys[e.key] = true);

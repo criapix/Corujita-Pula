@@ -55,10 +55,30 @@ export class GameRenderer {
     
     // Draw all platforms
     private drawPlatforms(platforms: Platform[]): void {
-        this.ctx.fillStyle = '#2ecc71';
+        // Check if platforms array is empty
+        if (platforms.length === 0) {
+            console.warn('No platforms to draw!');
+            return;
+        }
+        
+        console.log(`Drawing ${platforms.length} platforms`);
+        
+        // Draw each platform with a border to make them more visible
         platforms.forEach(platform => {
+            // Fill platform
+            this.ctx.fillStyle = '#2ecc71';
             this.ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
+            
+            // Add border
+            this.ctx.strokeStyle = '#27ae60';
+            this.ctx.lineWidth = 2;
+            this.ctx.strokeRect(platform.x, platform.y, platform.width, platform.height);
         });
+        
+        // Log the first few platforms for debugging
+        if (platforms.length > 0) {
+            console.log('First platform:', platforms[0]);
+        }
     }
     
     // Draw all enemies (only if alive)

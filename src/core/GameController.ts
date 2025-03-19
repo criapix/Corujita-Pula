@@ -15,6 +15,7 @@ export class GameController {
     private keys: KeyState;
     private gravity: number;
     private worldWidth: number;
+    private worldHeight: number;
     private cameraOffset: number = 0;
     private lastFireballTime: number = 0;
     private fireballCooldown: number;
@@ -35,7 +36,11 @@ export class GameController {
         this.keys = keys;
         this.gravity = gravity;
         this.worldWidth = worldWidth;
+        this.worldHeight = 800; // Set to match the worldHeight in game.ts
         this.fireballCooldown = fireballCooldown;
+        
+        // Set platforms on player for enemy collision detection
+        this.player.platforms = platforms;
         
         // Listen for playerHit event from projectiles
         document.addEventListener('playerHit', () => this.resetGame());
@@ -50,12 +55,14 @@ export class GameController {
         this.updateCamera(canvasWidth);
         this.checkWinCondition();
         this.checkEnemyCollisions();
+        this.checkFallDeath();
         this.updateEnemies();
         this.updateProjectiles();
     }
     
     // Handle player horizontal movement
     private handlePlayerMovement(): void {
+        // Horizontal movement
         if (this.keys.ArrowLeft) {
             this.player.x -= this.player.speed;
             this.lastDirection = -1; // Update last direction when moving left
@@ -64,7 +71,20 @@ export class GameController {
             this.player.x += this.player.speed;
             this.lastDirection = 1; // Update last direction when moving right
         }
-        
+
+        // Check for platform collisions
+        for (const platform of this.platforms) {
+            if (this.player.x + this.player.width > platform.x &&
+                this.player.x < platform.x + platform.width &&
+                this.player.y + this.player.height > platform.y &&
+                this.player.y < platform.y + platform.height) {
+                // Prevent player from passing through platforms
+                this.player.y = platform.y - this.player.height;
+                this.player.velocityY = 0;
+                this.player.isGrounded = true;
+            }
+        }
+
         // Handle jump
         if (this.keys.ArrowUp && this.player.isGrounded) {
             this.player.velocityY = this.player.jumpForce;
@@ -182,7 +202,9 @@ export class GameController {
     
     // Update all enemies
     private updateEnemies(): void {
-        this.enemies.forEach(enemy => enemy.update(this.player));
+        for (const enemy of this.enemies) {
+            enemy.update(this.player, this.gravity);
+        }
     }
     
     // Update all projectiles
@@ -201,5 +223,16 @@ export class GameController {
     // Getter for camera offset
     public getCameraOffset(): number {
         return this.cameraOffset;
+    }
+    
+    // Check if player has fallen into a gap/pit
+    private checkFallDeath(): void {
+        // If player falls below the bottom of the screen, consider it a death
+        const deathY = this.worldHeight - 100; // Allow some buffer before triggering death
+        
+        if (this.player.y > deathY) {
+            // Player has fallen into a gap
+            this.resetGame();
+        }
     }
 }

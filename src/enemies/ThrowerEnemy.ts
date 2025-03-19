@@ -10,6 +10,8 @@ export interface ThrowerEnemy extends EnemyObject {
     throwCooldown: number;
     lastThrowTime: number;
     throwRange: number;
+    velocityY: number;
+    isGrounded: boolean;
 }
 
 // Thrower enemy implementation
@@ -21,19 +23,74 @@ export const ThrowerEnemyImpl: ThrowerEnemy = {
     throwCooldown: 2000, // ms between throws
     lastThrowTime: 0,
     throwRange: 400,    // Detection range for throwing
-    update: function(player: Player): void {
+    velocityY: 0,
+    isGrounded: false,
+    update: function(player: Player, gravity: number): void {
         // Skip all updates if enemy is dead
         if (!this.alive) return;
         
-        // Basic movement like walker
-        this.x += this.speed * this.direction;
+        // Apply gravity
+        this.velocityY += gravity;
+        this.y += this.velocityY;
         
-        // Reverse direction at platform edges
-        if (this.platform && 
-            (this.x <= this.platform.x || 
-            this.x + this.width >= this.platform.x + this.platform.width)) {
+        // Get all platforms from the game controller
+        const platforms = player.platforms || [];
+        
+        // Check collisions with all platforms
+        this.isGrounded = false;
+        for (const platform of platforms) {
+            // Vertical collision check (landing on platform)
+            if (this.x + this.width > platform.x &&
+                this.x < platform.x + platform.width &&
+                this.y + this.height > platform.y &&
+                this.y < platform.y + platform.height) {
+                if (this.velocityY > 0) {
+                    this.isGrounded = true;
+                    this.velocityY = 0;
+                    this.y = platform.y - this.height;
+                }
+            }
+            
+            // Separate check for platform edges
+            if (this.isGrounded && 
+                this.y + this.height == platform.y) {
+                // Check if enemy is about to walk off the platform
+                const nextX = this.x + (this.speed * this.direction);
+                if (nextX <= platform.x || 
+                    nextX + this.width >= platform.x + platform.width) {
+                    this.direction *= -1;
+                }
+            }
+        }
+        
+        // Check collisions with other enemies before moving
+        const nextX = this.x + (this.speed * this.direction);
+        let shouldChangeDirection = false;
+        
+        // Get all enemies from the game
+        if (player && Array.isArray(player.enemies)) {
+            for (const otherEnemy of player.enemies) {
+                // Skip self and dead enemies
+                if (otherEnemy === this || !otherEnemy.alive) continue;
+                
+                // Check if we would collide with this enemy after moving
+                if (nextX + this.width > otherEnemy.x && 
+                    nextX < otherEnemy.x + otherEnemy.width &&
+                    this.y + this.height > otherEnemy.y &&
+                    this.y < otherEnemy.y + otherEnemy.height) {
+                    shouldChangeDirection = true;
+                    break;
+                }
+            }
+        }
+        
+        // Change direction if we would collide with another enemy
+        if (shouldChangeDirection) {
             this.direction *= -1;
         }
+        
+        // Basic movement like walker
+        this.x += this.speed * this.direction;
         
         // Throw projectile when player is in range
         const distanceToPlayer = Math.abs(this.x - player.x);

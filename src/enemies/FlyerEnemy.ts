@@ -24,10 +24,36 @@ export const FlyerEnemyImpl: FlyerEnemy = {
         // Skip update if enemy is dead
         if (!this.alive) return;
         
+        // Check collisions with other enemies before moving
+        const nextX = this.x + (this.speed * this.direction);
+        let shouldChangeDirection = false;
+        
+        // Get all enemies from the game
+        if (player && Array.isArray(player.enemies)) {
+            for (const otherEnemy of player.enemies) {
+                // Skip self and dead enemies
+                if (otherEnemy === this || !otherEnemy.alive) continue;
+                
+                // Check if we would collide with this enemy after moving
+                if (nextX + this.width > otherEnemy.x && 
+                    nextX < otherEnemy.x + otherEnemy.width &&
+                    this.y + this.height > otherEnemy.y &&
+                    this.y < otherEnemy.y + otherEnemy.height) {
+                    shouldChangeDirection = true;
+                    break;
+                }
+            }
+        }
+        
+        // Change direction if we would collide with another enemy
+        if (shouldChangeDirection) {
+            this.direction *= -1;
+        }
+        
         // Move horizontally like walker
         this.x += this.speed * this.direction;
         
-        // Reverse direction at walls
+        // Reverse direction at walls or platform edges
         if (this.x <= 0 || this.x + this.width >= 5000) { // Using worldWidth value
             this.direction *= -1;
         }

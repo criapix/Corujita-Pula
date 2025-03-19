@@ -50,28 +50,28 @@ export class Stage1 extends Stage {
     protected createEnemies(): void {
         const tileSize = this.tileMap.getTileSize();
 
-        // Walkers (positioned above ground platforms)
+        // Walkers (positioned directly on ground platforms)
         this.enemies.push(
             // Near starting platform
-            { ...WalkerEnemy, x: 5 * tileSize, y: 3 * tileSize, alive: true },
+            { ...WalkerEnemy, x: 5 * tileSize, y: 0, alive: true },
             // Near second platform
-            { ...WalkerEnemy, x: 26 * tileSize, y: 3 * tileSize, alive: true },
+            { ...WalkerEnemy, x: 26 * tileSize, y: 0, alive: true },
             // Near third platform
-            { ...WalkerEnemy, x: 50 * tileSize, y: 3 * tileSize, alive: true },
+            { ...WalkerEnemy, x: 50 * tileSize, y: 0, alive: true },
             // Near final platform
-            { ...WalkerEnemy, x: 95 * tileSize, y: 3 * tileSize, alive: true }
+            { ...WalkerEnemy, x: 95 * tileSize, y: 0, alive: true }
         );
 
-        // Jumpers (positioned above elevated platforms)
+        // Jumpers (positioned directly on elevated platforms)
         this.enemies.push(
             // Above elevated platform
-            { ...JumperEnemyImpl, x: 12 * tileSize, y: 6 * tileSize, alive: true },
+            { ...JumperEnemyImpl, x: 12 * tileSize, y: 5 * tileSize - 64, alive: true },
             // Above middle section
-            { ...JumperEnemyImpl, x: 39 * tileSize, y: 7 * tileSize, alive: true },
+            { ...JumperEnemyImpl, x: 39 * tileSize, y: 4 * tileSize - 64, alive: true },
             // Above high platform
-            { ...JumperEnemyImpl, x: 56 * tileSize, y: 9 * tileSize, alive: true },
+            { ...JumperEnemyImpl, x: 56 * tileSize, y: 8 * tileSize - 64, alive: true },
             // Above final section
-            { ...JumperEnemyImpl, x: 86 * tileSize, y: 8 * tileSize, alive: true }
+            { ...JumperEnemyImpl, x: 86 * tileSize, y: 7 * tileSize - 64, alive: true }
         );
 
         // Flyers (positioned in air)
@@ -84,16 +84,16 @@ export class Stage1 extends Stage {
             { ...FlyerEnemyImpl, x: 114 * tileSize, y: 7 * tileSize, initialY: 7 * tileSize, alive: true }
         );
 
-        // Throwers (positioned above platforms)
+        // Throwers (positioned directly on platforms)
         this.enemies.push(
             // First section
-            { ...ThrowerEnemyImpl, x: 30 * tileSize, y: 5 * tileSize, alive: true },
+            { ...ThrowerEnemyImpl, x: 30 * tileSize, y: 4 * tileSize - 64, alive: true },
             // Middle section
-            { ...ThrowerEnemyImpl, x: 73 * tileSize, y: 5 * tileSize, alive: true },
+            { ...ThrowerEnemyImpl, x: 73 * tileSize, y: 4 * tileSize - 64, alive: true },
             // Final section high platform
-            { ...ThrowerEnemyImpl, x: 92 * tileSize, y: 8 * tileSize, alive: true },
+            { ...ThrowerEnemyImpl, x: 92 * tileSize, y: 7 * tileSize - 64, alive: true },
             // Final section
-            { ...ThrowerEnemyImpl, x: 127 * tileSize, y: 6 * tileSize, alive: true }
+            { ...ThrowerEnemyImpl, x: 127 * tileSize, y: 3 * tileSize - 64, alive: true }
         );
     }
 }

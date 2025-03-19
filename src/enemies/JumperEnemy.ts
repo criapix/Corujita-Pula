@@ -34,6 +34,7 @@ export const JumperEnemyImpl: JumperEnemy = {
         // Check collisions with all platforms
         this.isGrounded = false;
         for (const platform of platforms) {
+            // Vertical collision check (landing on platform)
             if (this.x + this.width > platform.x &&
                 this.x < platform.x + platform.width &&
                 this.y + this.height > platform.y &&
@@ -42,14 +43,45 @@ export const JumperEnemyImpl: JumperEnemy = {
                     this.isGrounded = true;
                     this.velocityY = 0;
                     this.y = platform.y - this.height;
-                    
-                    // Reverse direction at platform edges
-                    if (this.x <= platform.x || 
-                        this.x + this.width >= platform.x + platform.width) {
-                        this.direction *= -1;
-                    }
                 }
             }
+            
+            // Separate check for platform edges
+            if (this.isGrounded && 
+                this.y + this.height == platform.y) {
+                // Check if enemy is about to walk off the platform
+                const nextX = this.x + (this.speed * this.direction);
+                if (nextX <= platform.x || 
+                    nextX + this.width >= platform.x + platform.width) {
+                    this.direction *= -1;
+                }
+            }
+        }
+        
+        // Check collisions with other enemies before moving
+        const nextX = this.x + (this.speed * this.direction);
+        let shouldChangeDirection = false;
+        
+        // Get all enemies from the game
+        if (player && Array.isArray(player.enemies)) {
+            for (const otherEnemy of player.enemies) {
+                // Skip self and dead enemies
+                if (otherEnemy === this || !otherEnemy.alive) continue;
+                
+                // Check if we would collide with this enemy after moving
+                if (nextX + this.width > otherEnemy.x && 
+                    nextX < otherEnemy.x + otherEnemy.width &&
+                    this.y + this.height > otherEnemy.y &&
+                    this.y < otherEnemy.y + otherEnemy.height) {
+                    shouldChangeDirection = true;
+                    break;
+                }
+            }
+        }
+        
+        // Change direction if we would collide with another enemy
+        if (shouldChangeDirection) {
+            this.direction *= -1;
         }
         
         // Basic movement like walker

@@ -11,9 +11,6 @@ export interface JumperEnemy extends EnemyObject {
     detectionRange: number;
 }
 
-// Gravity constant needed for jumper physics
-const gravity = 0.5;
-
 // Jumper enemy implementation
 export const JumperEnemyImpl: JumperEnemy = {
     ...WalkerEnemy,
@@ -23,7 +20,7 @@ export const JumperEnemyImpl: JumperEnemy = {
     velocityY: 0,
     isGrounded: false,
     detectionRange: 300,
-    update: function(player: Player): void {
+    update: function(player: Player, gravity: number): void {
         // Skip update if enemy is dead
         if (!this.alive) return;
         
@@ -31,26 +28,32 @@ export const JumperEnemyImpl: JumperEnemy = {
         this.velocityY += gravity;
         this.y += this.velocityY;
         
-        // Check if on ground
-        if (this.platform && this.y + this.height > this.platform.y && 
-            this.x + this.width > this.platform.x && 
-            this.x < this.platform.x + this.platform.width) {
-            this.isGrounded = true;
-            this.velocityY = 0;
-            this.y = this.platform.y - this.height;
-        } else {
-            this.isGrounded = false;
+        // Get all platforms from the game controller
+        const platforms = player.platforms || [];
+        
+        // Check collisions with all platforms
+        this.isGrounded = false;
+        for (const platform of platforms) {
+            if (this.x + this.width > platform.x &&
+                this.x < platform.x + platform.width &&
+                this.y + this.height > platform.y &&
+                this.y < platform.y + platform.height) {
+                if (this.velocityY > 0) {
+                    this.isGrounded = true;
+                    this.velocityY = 0;
+                    this.y = platform.y - this.height;
+                    
+                    // Reverse direction at platform edges
+                    if (this.x <= platform.x || 
+                        this.x + this.width >= platform.x + platform.width) {
+                        this.direction *= -1;
+                    }
+                }
+            }
         }
         
         // Basic movement like walker
         this.x += this.speed * this.direction;
-        
-        // Reverse direction at platform edges
-        if (this.platform && 
-            (this.x <= this.platform.x || 
-            this.x + this.width >= this.platform.x + this.platform.width)) {
-            this.direction *= -1;
-        }
         
         // Jump when player is nearby and enemy is on ground
         const distanceToPlayer = Math.abs(this.x - player.x);

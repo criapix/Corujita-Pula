@@ -18,47 +18,82 @@ export class Stage1 extends Stage {
      * using bottom-left corner coordinates and dimensions
      */
     protected createTerrain(): void {
-        this.tileMap.addPlatformByCoordinates(0, 3, 5, 1);
+        // Main ground platforms with gaps
+        this.tileMap.addPlatformByCoordinates(0, 0, 20, 3);  // Starting platform
+        this.tileMap.addPlatformByCoordinates(25, 0, 15, 3); // Platform after first gap
+        this.tileMap.addPlatformByCoordinates(45, 0, 20, 3); // Platform after second gap
+        this.tileMap.addPlatformByCoordinates(70, 0, 25, 3); // Platform after third gap
+        
+        // Elevated platforms
+        this.tileMap.addPlatformByCoordinates(10, 5, 5, 1);  // Small elevated platform
+        this.tileMap.addPlatformByCoordinates(22, 7, 3, 1);  // Small floating platform
+        this.tileMap.addPlatformByCoordinates(30, 4, 8, 1);  // Medium elevated platform
+        this.tileMap.addPlatformByCoordinates(42, 6, 4, 1);  // Small floating platform
+        
+        // Middle section platforms
+        this.tileMap.addPlatformByCoordinates(50, 3, 6, 1);  // Low platform
+        this.tileMap.addPlatformByCoordinates(60, 5, 7, 1);  // Medium platform
+        this.tileMap.addPlatformByCoordinates(55, 8, 4, 1);  // High platform
+        
+        // Final section platforms
+        this.tileMap.addPlatformByCoordinates(75, 4, 10, 1); // Long elevated platform
+        this.tileMap.addPlatformByCoordinates(90, 7, 5, 1);  // High platform
+        this.tileMap.addPlatformByCoordinates(100, 5, 3, 1); // Small platform
+        this.tileMap.addPlatformByCoordinates(105, 3, 15, 1); // Final platform
     }
 
     /**
      * Creates and positions enemies for Stage 1
+     * Enemies are positioned using X and Y coordinates only
+     * Gravity and collision will make them settle on platforms
      */
     protected createEnemies(): void {
         const tileSize = this.tileMap.getTileSize();
 
-        // Walkers (positioned on specific platforms)
+        // Walkers (positioned above ground platforms)
         this.enemies.push(
-            // Platform at row 16, col 25 (second platform)
-            { ...WalkerEnemy, x: 26 * tileSize, y: (16 * tileSize) - 128, platform: this.platforms[20], alive: true },
-            // Platform at row 15, col 93 (floating platform)
-            { ...WalkerEnemy, x: 95 * tileSize, y: (15 * tileSize) - 128, platform: this.platforms[80], alive: true }
+            // Near starting platform
+            { ...WalkerEnemy, x: 5 * tileSize, y: 3 * tileSize, alive: true },
+            // Near second platform
+            { ...WalkerEnemy, x: 26 * tileSize, y: 3 * tileSize, alive: true },
+            // Near third platform
+            { ...WalkerEnemy, x: 50 * tileSize, y: 3 * tileSize, alive: true },
+            // Near final platform
+            { ...WalkerEnemy, x: 95 * tileSize, y: 3 * tileSize, alive: true }
         );
 
-        // Jumpers (positioned on specific platforms)
+        // Jumpers (positioned above elevated platforms)
         this.enemies.push(
-            // Platform at row 12, col 37 (floating platform)
-            { ...JumperEnemyImpl, x: 39 * tileSize, y: (12 * tileSize) - 128, platform: this.platforms[40], alive: true },
-            // Platform at row 10, col 84 (floating platform)
-            { ...JumperEnemyImpl, x: 86 * tileSize, y: (10 * tileSize) - 128, platform: this.platforms[70], alive: true }
+            // Above elevated platform
+            { ...JumperEnemyImpl, x: 12 * tileSize, y: 6 * tileSize, alive: true },
+            // Above middle section
+            { ...JumperEnemyImpl, x: 39 * tileSize, y: 7 * tileSize, alive: true },
+            // Above high platform
+            { ...JumperEnemyImpl, x: 56 * tileSize, y: 9 * tileSize, alive: true },
+            // Above final section
+            { ...JumperEnemyImpl, x: 86 * tileSize, y: 8 * tileSize, alive: true }
         );
 
-        // Flyers (positioned in air above platforms)
+        // Flyers (positioned in air)
         this.enemies.push(
-            // Above platform at row 9, col 56 (floating platform)
-            { ...FlyerEnemyImpl, x: 58 * tileSize, y: 7 * tileSize, initialY: 7 * tileSize, platform: null, alive: true },
-            // Above platform at row 9, col 112 (floating platform)
-            { ...FlyerEnemyImpl, x: 114 * tileSize, y: 7 * tileSize, initialY: 7 * tileSize, platform: null, alive: true }
+            // First section
+            { ...FlyerEnemyImpl, x: 15 * tileSize, y: 7 * tileSize, initialY: 7 * tileSize, alive: true },
+            // Middle section
+            { ...FlyerEnemyImpl, x: 58 * tileSize, y: 7 * tileSize, initialY: 7 * tileSize, alive: true },
+            // Final section
+            { ...FlyerEnemyImpl, x: 114 * tileSize, y: 7 * tileSize, initialY: 7 * tileSize, alive: true }
         );
 
-        // Throwers (positioned on specific platforms)
+        // Throwers (positioned above platforms)
         this.enemies.push(
-            // Platform at row 14, col 71 (floating platform)
-            { ...ThrowerEnemyImpl, x: 73 * tileSize, y: (14 * tileSize) - 128, platform: this.platforms[60], alive: true },
-            // Platform at row 10, col 125 (floating platform)
-            { ...ThrowerEnemyImpl, x: 127 * tileSize, y: (10 * tileSize) - 128, platform: this.platforms[90], alive: true },
-            // Platform at row 7, col 134 (floating platform)
-            { ...ThrowerEnemyImpl, x: 136 * tileSize, y: (7 * tileSize) - 128, platform: this.platforms[100], alive: true }
+            // First section
+            { ...ThrowerEnemyImpl, x: 30 * tileSize, y: 5 * tileSize, alive: true },
+            // Middle section
+            { ...ThrowerEnemyImpl, x: 73 * tileSize, y: 5 * tileSize, alive: true },
+            // Final section high platform
+            { ...ThrowerEnemyImpl, x: 92 * tileSize, y: 8 * tileSize, alive: true },
+            // Final section
+            { ...ThrowerEnemyImpl, x: 127 * tileSize, y: 6 * tileSize, alive: true }
         );
     }
 }

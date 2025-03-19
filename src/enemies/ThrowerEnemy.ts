@@ -10,6 +10,8 @@ export interface ThrowerEnemy extends EnemyObject {
     throwCooldown: number;
     lastThrowTime: number;
     throwRange: number;
+    velocityY: number;
+    isGrounded: boolean;
 }
 
 // Thrower enemy implementation
@@ -21,19 +23,42 @@ export const ThrowerEnemyImpl: ThrowerEnemy = {
     throwCooldown: 2000, // ms between throws
     lastThrowTime: 0,
     throwRange: 400,    // Detection range for throwing
-    update: function(player: Player): void {
+    velocityY: 0,
+    isGrounded: false,
+    update: function(player: Player, gravity: number): void {
         // Skip all updates if enemy is dead
         if (!this.alive) return;
         
+        // Apply gravity
+        this.velocityY += gravity;
+        this.y += this.velocityY;
+        
+        // Get all platforms from the game controller
+        const platforms = player.platforms || [];
+        
+        // Check collisions with all platforms
+        this.isGrounded = false;
+        for (const platform of platforms) {
+            if (this.x + this.width > platform.x &&
+                this.x < platform.x + platform.width &&
+                this.y + this.height > platform.y &&
+                this.y < platform.y + platform.height) {
+                if (this.velocityY > 0) {
+                    this.isGrounded = true;
+                    this.velocityY = 0;
+                    this.y = platform.y - this.height;
+                    
+                    // Reverse direction at platform edges
+                    if (this.x <= platform.x || 
+                        this.x + this.width >= platform.x + platform.width) {
+                        this.direction *= -1;
+                    }
+                }
+            }
+        }
+        
         // Basic movement like walker
         this.x += this.speed * this.direction;
-        
-        // Reverse direction at platform edges
-        if (this.platform && 
-            (this.x <= this.platform.x || 
-            this.x + this.width >= this.platform.x + this.platform.width)) {
-            this.direction *= -1;
-        }
         
         // Throw projectile when player is in range
         const distanceToPlayer = Math.abs(this.x - player.x);

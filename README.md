@@ -1,57 +1,46 @@
 # Coruja - Jogo de Plataforma Animal
 
-Um jogo 2D desenvolvido em TypeScript onde uma coruja deve navegar por plataformas e enfrentar inimigos animais usando habilidades especiais.
+Um jogo onde uma coruja deve navegar por plataformas e enfrentar inimigos animais usando habilidades especiais.
 
 ## Visão Geral do Jogo
 
-- **Personagem Principal**: Coruja com capacidade de voo controlável
+- **Personagem Principal**:
+  - Coruja com capacidade de disparar bolas de fogo
 - **Mecânicas Principais**:
   - Movimentação aérea e terrestre
   - Sistema de combate com fireballs
-  - Inimigos com comportamentos únicos
+  - 4 inimigos com comportamentos distintos
   - Sistema de projéteis
-  - Plataformas dinâmicas
 - **Elementos Visuais**:
   - Céu azul com nuvens em movimento
   - Efeito de parallax para profundidade visual
-  - Inimigos com sprites únicos
+  - 4 inimigos com sprites distintos
 
 ## Tipos de Inimigos
 
-### 🐾 Andarilho (Walker)
-- **Comportamento**: Patrulha horizontal em plataformas
+### Andarilho (Walker)
+- **Comportamento**: Patrulha horizontal nas plataformas
 - **Sprite**: `assets/images/fox-svgrepo-com.svg`
 
-### 🦎 Saltador (Jumper)
+### Saltador (Jumper)
 - **Comportamento**: Salta em direção ao jogador quando próximo
 - **Sprite**: `assets/images/frog-svgrepo-com.svg`
 
-### 🦜 Voador (Flyer)
-- **Comportamento**: Movimento ondulatório vertical
+### Voador (Flyer)
+- **Comportamento**: Movimento de voo ondulatório vertical
 - **Sprite**: `assets/images/parrot-svgrepo-com.svg`
 
-### 🐻 Lançador (Thrower)
+### Lançador (Thrower)
 - **Comportamento**: Arremessa projéteis em arco
 - **Sprite**: `assets/images/panda-bear-panda-svgrepo-com.svg`
 
 ## Como Jogar
-- **Setas**: Movimento horizontal
-- **Espaço**: Salto/Voo
-- **Tecla F**: Lançar fireball
+- **Setas**: Movimento horizontal e salto
+- **Espaço**: Lançar fireball
 - **Mecânicas de Combate**:
   - Pise em inimigos para eliminá-los
   - Fireballs destroem inimigos à distância
   - Evite projéteis inimigos
-
-## Configuração e Execução
-
-```bash
-npm install
-npm run build
-npm start
-```
-
-Acesse `http://localhost:8080` no seu navegador
 
 ## Créditos de Assets
 
@@ -61,38 +50,6 @@ Acesse `http://localhost:8080` no seu navegador
   - Raposa: Fox vector
   - Sapo: Frog vector
   - Papagaio: Parrot vector
-
-## Issues Conhecidas
-
-✅ Resolvido - Projéteis do lançador não causavam dano
-⚠️ Limitação atual - Colisões aéreas ainda em ajustes
-🔄 Em desenvolvimento - Sistema de pontuação e power-ups
-
-
-## Instalação e Execução
-
-1. Clone o repositório
-2. Instale as dependências:
-   ```
-   npm install
-   ```
-3. Compile o código TypeScript:
-   ```
-   npm run build
-   ```
-4. Inicie o servidor HTTP local:
-   ```
-   npm start
-   ```
-5. Acesse `http://localhost:8080` em seu navegador
-
-## Testes
-
-O projeto inclui testes unitários usando Jest. Para executar os testes:
-
-```bash
-npm test
-```
 
 ## Mecânicas de Jogo
 

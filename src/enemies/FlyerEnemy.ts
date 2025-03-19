@@ -20,14 +20,14 @@ export const FlyerEnemyImpl: FlyerEnemy = {
     frequency: 0.02, // Speed of oscillation
     initialY: 0,     // Starting Y position
     time: 0,         // Time counter for oscillation
-    update: function(player: Player): void {
+    update: function(player: Player, gravity: number): void {
         // Skip update if enemy is dead
         if (!this.alive) return;
         
         // Move horizontally like walker
         this.x += this.speed * this.direction;
         
-        // Reverse direction at platform edges or walls
+        // Reverse direction at walls
         if (this.x <= 0 || this.x + this.width >= 5000) { // Using worldWidth value
             this.direction *= -1;
         }

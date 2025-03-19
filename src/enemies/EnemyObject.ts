@@ -7,9 +7,10 @@ import { EnemyType } from './EnemyType';
 export interface EnemyObject extends GameObject {
     speed: number;
     direction: number;
-    platform: Platform | null;
     type: EnemyType;
-    update: (player: Player) => void;
+    update: (player: Player, gravity: number) => void;
     alive: boolean;
     spritePath: string;
+    velocityY: number;
+    isGrounded: boolean;
 }

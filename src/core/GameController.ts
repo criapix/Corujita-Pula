@@ -39,6 +39,9 @@ export class GameController {
         this.worldHeight = 800; // Set to match the worldHeight in game.ts
         this.fireballCooldown = fireballCooldown;
         
+        // Set platforms on player for enemy collision detection
+        this.player.platforms = platforms;
+        
         // Listen for playerHit event from projectiles
         document.addEventListener('playerHit', () => this.resetGame());
     }
@@ -59,6 +62,7 @@ export class GameController {
     
     // Handle player horizontal movement
     private handlePlayerMovement(): void {
+        // Horizontal movement
         if (this.keys.ArrowLeft) {
             this.player.x -= this.player.speed;
             this.lastDirection = -1; // Update last direction when moving left
@@ -67,7 +71,20 @@ export class GameController {
             this.player.x += this.player.speed;
             this.lastDirection = 1; // Update last direction when moving right
         }
-        
+
+        // Check for platform collisions
+        for (const platform of this.platforms) {
+            if (this.player.x + this.player.width > platform.x &&
+                this.player.x < platform.x + platform.width &&
+                this.player.y + this.player.height > platform.y &&
+                this.player.y < platform.y + platform.height) {
+                // Prevent player from passing through platforms
+                this.player.y = platform.y - this.player.height;
+                this.player.velocityY = 0;
+                this.player.isGrounded = true;
+            }
+        }
+
         // Handle jump
         if (this.keys.ArrowUp && this.player.isGrounded) {
             this.player.velocityY = this.player.jumpForce;
@@ -185,7 +202,9 @@ export class GameController {
     
     // Update all enemies
     private updateEnemies(): void {
-        this.enemies.forEach(enemy => enemy.update(this.player));
+        for (const enemy of this.enemies) {
+            enemy.update(this.player, this.gravity);
+        }
     }
     
     // Update all projectiles

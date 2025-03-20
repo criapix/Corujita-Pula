@@ -4,6 +4,7 @@ import { EnemyObject } from './enemies/EnemyObject';
 import { Projectile } from './Projectile';
 import { GameController } from './core/GameController';
 import { Sky } from './core/Sky';
+import { TouchControls } from './core/TouchControls';
 
 
 // Class to handle all game rendering
@@ -15,6 +16,7 @@ export class GameRenderer {
     private sky: Sky;
     private scaleX: number = 1;
     private scaleY: number = 1;
+    private touchControls: TouchControls;
     
     constructor(
         ctx: CanvasRenderingContext2D, 
@@ -27,16 +29,33 @@ export class GameRenderer {
         this.enemyImages = enemyImages;
         this.worldWidth = worldWidth;
         this.sky = new Sky(ctx, worldWidth, 15);
+        // Importar o objeto keys do game.ts
+        const keys = (window as any).gameKeys || {};
+        this.touchControls = new TouchControls(ctx.canvas, ctx, keys);
         
         // Calculate initial scale factors
         this.updateScaleFactors();
     }
     
-    // Update scale factors based on current canvas size
+    // Update scale factors based on current canvas size and orientation
     public updateScaleFactors(): void {
-        // Set scale factors based on window dimensions
-        this.scaleX = window.innerWidth / this.ctx.canvas.width;
-        this.scaleY = window.innerHeight / this.ctx.canvas.height;
+        const isPortrait = window.innerHeight > window.innerWidth;
+        const aspectRatio = window.innerWidth / window.innerHeight;
+        
+        // Base scale calculation
+        let baseScale = Math.min(
+            window.innerWidth / this.ctx.canvas.width,
+            window.innerHeight / this.ctx.canvas.height
+        );
+        
+        // Apply reduction factor for portrait mode
+        if (isPortrait) {
+            // Reduce scale more aggressively in portrait mode
+            baseScale *= Math.min(1, aspectRatio + 0.3);
+        }
+        
+        this.scaleX = baseScale;
+        this.scaleY = baseScale;
     }
     
     // Main draw function
@@ -74,6 +93,9 @@ export class GameRenderer {
         this.drawProjectiles(GameController.projectiles);
         
         this.ctx.restore();
+        
+        // Draw touch controls
+        this.touchControls.draw();
         
         // Debug information
         //console.log(`Drawing at scale: ${this.scaleX}x${this.scaleY}, Camera offset: ${cameraOffset}`);

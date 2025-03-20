@@ -13,6 +13,8 @@ export class GameRenderer {
     private enemyImages: Map<string, HTMLImageElement>;
     private worldWidth: number;
     private sky: Sky;
+    private scaleX: number = 1;
+    private scaleY: number = 1;
     
     constructor(
         ctx: CanvasRenderingContext2D, 
@@ -25,18 +27,39 @@ export class GameRenderer {
         this.enemyImages = enemyImages;
         this.worldWidth = worldWidth;
         this.sky = new Sky(ctx, worldWidth, 15);
+        
+        // Calculate initial scale factors
+        this.updateScaleFactors();
+    }
+    
+    // Update scale factors based on current canvas size
+    public updateScaleFactors(): void {
+        // Set scale factors based on window dimensions
+        this.scaleX = window.innerWidth / this.ctx.canvas.width;
+        this.scaleY = window.innerHeight / this.ctx.canvas.height;
     }
     
     // Main draw function
     public draw(player: Player, platforms: Platform[], enemies: EnemyObject[], cameraOffset: number): void {
+        // Update scale factors in case canvas size has changed
+        this.updateScaleFactors();
+        
+        this.ctx.save();
+        
+        // Reset transformations and clear canvas
+        this.ctx.setTransform(1, 0, 0, 1, 0, 0);
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+        
+        // Set up the camera and scaling in the correct order
+        this.ctx.setTransform(
+            this.scaleX, 0,
+            0, this.scaleY,
+            -cameraOffset * this.scaleX, 0
+        );
         
         // Draw sky and clouds with parallax effect
         this.sky.update(cameraOffset);
         this.sky.draw(cameraOffset);
-        
-        this.ctx.save();
-        this.ctx.translate(-cameraOffset, 0);
         
         // Draw player
         this.ctx.drawImage(this.playerImage, player.x, player.y, player.width, player.height);
@@ -51,6 +74,9 @@ export class GameRenderer {
         this.drawProjectiles(GameController.projectiles);
         
         this.ctx.restore();
+        
+        // Debug information
+        //console.log(`Drawing at scale: ${this.scaleX}x${this.scaleY}, Camera offset: ${cameraOffset}`);
     }
     
     // Draw all platforms
@@ -61,7 +87,7 @@ export class GameRenderer {
             return;
         }
         
-        console.log(`Drawing ${platforms.length} platforms`);
+        //console.log(`Drawing ${platforms.length} platforms`);
         
         // Draw each platform with a border to make them more visible
         platforms.forEach(platform => {
@@ -76,9 +102,9 @@ export class GameRenderer {
         });
         
         // Log the first few platforms for debugging
-        if (platforms.length > 0) {
-            console.log('First platform:', platforms[0]);
-        }
+        //if (platforms.length > 0) {
+        //    console.log('First platform:', platforms[0]);
+        //}
     }
     
     // Draw all enemies (only if alive)

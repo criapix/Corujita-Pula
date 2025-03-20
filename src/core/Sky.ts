@@ -91,12 +91,12 @@ export class Sky {
         this.ctx.fillRect(-this.worldWidth, 0, this.worldWidth * 3, this.ctx.canvas.height);
         
         // Apply camera offset for parallax effect
-        this.ctx.translate(-cameraOffset * 0.5, 0); // Clouds move at half the speed of foreground
+        this.ctx.translate(cameraOffset * 0.5, 0); // Clouds move at half the speed of foreground
         
         // Draw clouds
         this.clouds.forEach(cloud => {
             // Calculate the adjusted cloud position with parallax effect
-            const cameraOffsetParallax = cameraOffset * 1.5;
+            const cameraOffsetParallax = cameraOffset * 0.5;
             
             // Expanded visibility check to ensure clouds are visible across the entire stage
             // Add extra buffer to prevent any gaps

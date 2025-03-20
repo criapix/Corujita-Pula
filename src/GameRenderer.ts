@@ -32,11 +32,25 @@ export class GameRenderer {
         this.updateScaleFactors();
     }
     
-    // Update scale factors based on current canvas size
+    // Update scale factors based on current canvas size and orientation
     public updateScaleFactors(): void {
-        // Set scale factors based on window dimensions
-        this.scaleX = window.innerWidth / this.ctx.canvas.width;
-        this.scaleY = window.innerHeight / this.ctx.canvas.height;
+        const isPortrait = window.innerHeight > window.innerWidth;
+        const aspectRatio = window.innerWidth / window.innerHeight;
+        
+        // Base scale calculation
+        let baseScale = Math.min(
+            window.innerWidth / this.ctx.canvas.width,
+            window.innerHeight / this.ctx.canvas.height
+        );
+        
+        // Apply reduction factor for portrait mode
+        if (isPortrait) {
+            // Reduce scale more aggressively in portrait mode
+            baseScale *= Math.min(1, aspectRatio + 0.3);
+        }
+        
+        this.scaleX = baseScale;
+        this.scaleY = baseScale;
     }
     
     // Main draw function

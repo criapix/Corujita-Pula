@@ -96,17 +96,18 @@ export class Sky {
         // Draw clouds
         this.clouds.forEach(cloud => {
             // Calculate the adjusted cloud position with parallax effect
-            const cloudXParallax = cloud.x * 0.5;
+            const cameraOffsetParallax = cameraOffset * 1.5;
             
             // Expanded visibility check to ensure clouds are visible across the entire stage
             // Add extra buffer to prevent any gaps
             const screenWidth = this.ctx.canvas.width;
             
-            if (cloudXParallax > cameraOffset && cloudXParallax < cameraOffset + screenWidth) {
+            if (cloud.x + cloud.width  > cameraOffsetParallax && cloud.x < cameraOffsetParallax + screenWidth) {
                 this.drawCloud(cloud);
-            }
+            }            
             //console.log("cameraOffset: " + cameraOffset);
         });
+
         
         this.ctx.restore();
     }

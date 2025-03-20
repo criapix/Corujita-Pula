@@ -28,6 +28,7 @@ export class GameController {
         keys: KeyState,
         gravity: number,
         worldWidth: number,
+        worldHeight: number,
         fireballCooldown: number
     ) {
         this.player = player;
@@ -36,7 +37,7 @@ export class GameController {
         this.keys = keys;
         this.gravity = gravity;
         this.worldWidth = worldWidth;
-        this.worldHeight = 800; // Set to match the worldHeight in game.ts
+        this.worldHeight = worldHeight; // Use the value passed from game.ts
         this.fireballCooldown = fireballCooldown;
         
         // Set platforms on player for enemy collision detection

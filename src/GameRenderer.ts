@@ -97,8 +97,7 @@ export class GameRenderer {
         // Draw touch controls
         this.touchControls.draw();
         
-        // Debug information
-        //console.log(`Drawing at scale: ${this.scaleX}x${this.scaleY}, Camera offset: ${cameraOffset}`);
+        // Draw complete
     }
     
     // Draw all platforms
@@ -108,8 +107,6 @@ export class GameRenderer {
             console.warn('No platforms to draw!');
             return;
         }
-        
-        //console.log(`Drawing ${platforms.length} platforms`);
         
         // Draw each platform with a border to make them more visible
         platforms.forEach(platform => {
@@ -123,10 +120,7 @@ export class GameRenderer {
             this.ctx.strokeRect(platform.x, platform.y, platform.width, platform.height);
         });
         
-        // Log the first few platforms for debugging
-        //if (platforms.length > 0) {
-        //    console.log('First platform:', platforms[0]);
-        //}
+
     }
     
     // Draw all enemies (only if alive)

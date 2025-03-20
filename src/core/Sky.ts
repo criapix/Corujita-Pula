@@ -1,5 +1,3 @@
-import { GameObject } from './GameObject';
-
 // Class to manage sky background with moving clouds
 export class Sky {
     private ctx: CanvasRenderingContext2D;

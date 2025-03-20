@@ -85,13 +85,7 @@ const player: Player = {
 const platforms: Platform[] = currentStage.getPlatforms();
 const enemies: (EnemyObject | JumperEnemy | FlyerEnemy | ThrowerEnemy)[] = currentStage.getEnemies();
 
-// Debug: Log platform count
-//console.log(`Loaded ${platforms.length} platforms from Stage1`);
-// Debug: Log a few platforms
-//if (platforms.length > 0) {
-//    console.log('First platform:', platforms[0]);
-//    console.log('Last platform:', platforms[platforms.length - 1]);
-//}
+
 
 const keys: KeyState = {};
 
@@ -117,6 +111,7 @@ function startGame(): void {
         keys,
         gravity,
         worldWidth,
+        worldHeight,
         fireballCooldown
     );
     

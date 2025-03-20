@@ -1,4 +1,4 @@
-import { GameObject } from '../GameObject';
+import { GameObject } from '../core/GameObject';
 import { Player } from '../core/Player';
 import { EnemyObject } from '../enemies/EnemyObject';
 

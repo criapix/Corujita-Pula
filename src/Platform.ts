@@ -1,4 +1,4 @@
-import { GameObject } from './GameObject';
+import { GameObject } from './core/GameObject';
 
 // Simple platform interface
 export interface Platform extends GameObject {

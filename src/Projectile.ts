@@ -1,4 +1,4 @@
-import { GameObject } from './GameObject';
+import { GameObject } from './core/GameObject';
 
 // Projectile interface for both player fireballs and enemy projectiles
 export interface Projectile extends GameObject {

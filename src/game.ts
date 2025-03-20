@@ -95,6 +95,9 @@ const enemies: (EnemyObject | JumperEnemy | FlyerEnemy | ThrowerEnemy)[] = curre
 
 const keys: KeyState = {};
 
+// Expose keys globally for TouchControls to access
+(window as any).gameKeys = keys;
+
 // Event listeners for controls
 document.addEventListener('keydown', (e: KeyboardEvent) => keys[e.key] = true);
 document.addEventListener('keyup', (e: KeyboardEvent) => keys[e.key] = false);

@@ -130,11 +130,23 @@ export class GameController {
     
     // Update camera position
     private updateCamera(canvasWidth: number): void {
-        const cameraEdge = canvasWidth / 2;
+        // Calculate the visible width of the game world based on the canvas width
+        // This ensures we're using the logical width, not the stretched width
+        const visibleWidth = canvasWidth;
+        const cameraEdge = visibleWidth / 2;
+        
+        // Camera follows player when they move beyond the center point
         if (this.player.x > this.cameraOffset + cameraEdge) {
             this.cameraOffset = this.player.x - cameraEdge;
         }
-        this.cameraOffset = Math.max(0, Math.min(this.worldWidth - canvasWidth, this.cameraOffset));
+        
+        // Ensure camera stays within world boundaries
+        this.cameraOffset = Math.max(0, Math.min(this.worldWidth - visibleWidth, this.cameraOffset));
+    }
+    
+    // Get camera offset
+    public getCameraOffset(): number {
+        return this.cameraOffset;
     }
     
     // Check win condition
@@ -220,10 +232,7 @@ export class GameController {
         );
     }
     
-    // Getter for camera offset
-    public getCameraOffset(): number {
-        return this.cameraOffset;
-    }
+    // Getter for camera offset já está implementado acima
     
     // Check if player has fallen into a gap/pit
     private checkFallDeath(): void {

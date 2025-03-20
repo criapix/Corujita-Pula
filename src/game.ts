@@ -14,8 +14,43 @@ import { Stage1 } from './stages/Stage1';
 const canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
 const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
+// Initialize game controller and renderer
+let gameController: GameController | null = null;
+let gameRenderer: GameRenderer | null = null;
+
 // Load game assets
 const playerImage = new Image();
+
+
+
+// Set up responsive canvas
+function resizeCanvas(): void {
+    // Set canvas dimensions to match window size
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    
+    // Set canvas style dimensions to match window size
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    
+    // Center the canvas
+    canvas.style.position = 'absolute';
+    canvas.style.left = '0';
+    canvas.style.top = '0';
+    
+    // Update renderer scale factors if available
+    if (gameRenderer !== null) {
+        gameRenderer.updateScaleFactors();
+    }
+    
+    console.log(`Canvas resized to ${canvas.width}x${canvas.height}`);
+}
+
+// Initial canvas sizing
+resizeCanvas();
+
+// Add resize event listener
+window.addEventListener('resize', resizeCanvas);
 
 // Track loaded assets
 let assetsLoaded = 0;
@@ -30,9 +65,9 @@ const worldWidth = currentStage.getWorldWidth();
 const worldHeight = currentStage.getWorldHeight();
 const gravity = currentStage.getGravity();
 
-// Configure canvas
-canvas.width = 800;
-canvas.height = 600;
+// Game scale factors
+let scaleX = 1;
+let scaleY = 1;
 
 // Initialize game objects
 const player: Player = {
@@ -51,12 +86,12 @@ const platforms: Platform[] = currentStage.getPlatforms();
 const enemies: (EnemyObject | JumperEnemy | FlyerEnemy | ThrowerEnemy)[] = currentStage.getEnemies();
 
 // Debug: Log platform count
-console.log(`Loaded ${platforms.length} platforms from Stage1`);
+//console.log(`Loaded ${platforms.length} platforms from Stage1`);
 // Debug: Log a few platforms
-if (platforms.length > 0) {
-    console.log('First platform:', platforms[0]);
-    console.log('Last platform:', platforms[platforms.length - 1]);
-}
+//if (platforms.length > 0) {
+//    console.log('First platform:', platforms[0]);
+//    console.log('Last platform:', platforms[platforms.length - 1]);
+//}
 
 const keys: KeyState = {};
 
@@ -64,9 +99,7 @@ const keys: KeyState = {};
 document.addEventListener('keydown', (e: KeyboardEvent) => keys[e.key] = true);
 document.addEventListener('keyup', (e: KeyboardEvent) => keys[e.key] = false);
 
-// Initialize game controller and renderer
-let gameController: GameController;
-let gameRenderer: GameRenderer;
+
 
 // Get enemy registry instance
 const enemyRegistry = EnemyRegistry.getInstance();
@@ -109,18 +142,35 @@ enemyRegistry.loadAllSprites(() => {
     if(assetsLoaded === totalAssets) startGame();
 });
 
+// Calculate scale factors based on current canvas size
+function calculateScaleFactors(): { scaleX: number, scaleY: number } {
+    return {
+        scaleX: window.innerWidth / canvas.width,
+        scaleY: window.innerHeight / canvas.height
+    };
+}
+
 // Main game loop
 function gameLoop(): void {
-    // Update game state
-    gameController.update(canvas.width);
+    // Update scale factors
+    const { scaleX: currentScaleX, scaleY: currentScaleY } = calculateScaleFactors();
+    scaleX = currentScaleX;
+    scaleY = currentScaleY;
     
-    // Render game
-    gameRenderer.draw(
-        player,
-        platforms,
-        enemies,
-        gameController.getCameraOffset()
-    );
+    if (gameController) {
+        // Update game state with scaled canvas width
+        gameController.update(canvas.width / scaleX);
+        
+        // Render game
+        if (gameRenderer) {
+            gameRenderer.draw(
+                player,
+                platforms,
+                enemies,
+                gameController.getCameraOffset()
+            );
+        }
+    }
     
     // Continue loop
     requestAnimationFrame(gameLoop);

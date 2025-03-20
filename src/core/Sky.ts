@@ -85,9 +85,10 @@ export class Sky {
         gradient.addColorStop(0, '#87CEEB'); // Sky blue at top
         gradient.addColorStop(1, '#B0E2FF'); // Lighter blue at bottom
         
-        // Fill background with gradient
+        // Fill background with gradient, extending beyond visible area
         this.ctx.fillStyle = gradient;
-        this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+        // Draw background starting from the leftmost point of the world
+        this.ctx.fillRect(-this.worldWidth, 0, this.worldWidth * 3, this.ctx.canvas.height);
         
         // Apply camera offset for parallax effect
         this.ctx.translate(-cameraOffset * 0.5, 0); // Clouds move at half the speed of foreground
@@ -95,16 +96,16 @@ export class Sky {
         // Draw clouds
         this.clouds.forEach(cloud => {
             // Calculate the adjusted cloud position with parallax effect
-            // Since clouds move at half speed (cameraOffset * 0.5), we need to adjust our visibility check
-            const adjustedX = cloud.x;
-            const parallaxCameraOffset = cameraOffset * 0.5;
+            const cloudXParallax = cloud.x * 0.5;
             
-            // Only draw clouds that are visible on screen with a buffer based on cloud width
-            // This ensures clouds don't disappear until they're fully off-screen
-            if (adjustedX + cloud.width > parallaxCameraOffset - cloud.width && 
-                adjustedX < parallaxCameraOffset + this.ctx.canvas.width + cloud.width) {
+            // Expanded visibility check to ensure clouds are visible across the entire stage
+            // Add extra buffer to prevent any gaps
+            const screenWidth = this.ctx.canvas.width;
+            
+            if (cloudXParallax > cameraOffset && cloudXParallax < cameraOffset + screenWidth) {
                 this.drawCloud(cloud);
             }
+            //console.log("cameraOffset: " + cameraOffset);
         });
         
         this.ctx.restore();

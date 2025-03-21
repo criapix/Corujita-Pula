@@ -53,47 +53,47 @@ export class Stage1 extends Stage {
         // Walkers (positioned directly on ground platforms)
         this.enemies.push(
             // Near starting platform
-            { ...WalkerEnemy, x: 5 * tileSize, y: 0, alive: true },
+            { ...WalkerEnemy, x: 5 * tileSize, y: 5 * tileSize },
             // Near second platform
-            { ...WalkerEnemy, x: 26 * tileSize, y: 0, alive: true },
+            { ...WalkerEnemy, x: 26 * tileSize, y: 0 },
             // Near third platform
-            { ...WalkerEnemy, x: 50 * tileSize, y: 0, alive: true },
+            { ...WalkerEnemy, x: 50 * tileSize, y: 0 },
             // Near final platform
-            { ...WalkerEnemy, x: 95 * tileSize, y: 0, alive: true }
+            { ...WalkerEnemy, x: 95 * tileSize, y: 0 }
         );
 
         // Jumpers (positioned directly on elevated platforms)
         this.enemies.push(
             // Above elevated platform
-            { ...JumperEnemyImpl, x: 12 * tileSize, y: 5 * tileSize - 64, alive: true },
+            { ...JumperEnemyImpl, x: 12 * tileSize, y: 5 * tileSize - 64 },
             // Above middle section
-            { ...JumperEnemyImpl, x: 39 * tileSize, y: 4 * tileSize - 64, alive: true },
+            { ...JumperEnemyImpl, x: 39 * tileSize, y: 4 * tileSize - 64 },
             // Above high platform
-            { ...JumperEnemyImpl, x: 56 * tileSize, y: 8 * tileSize - 64, alive: true },
+            { ...JumperEnemyImpl, x: 56 * tileSize, y: 8 * tileSize - 64 },
             // Above final section
-            { ...JumperEnemyImpl, x: 86 * tileSize, y: 7 * tileSize - 64, alive: true }
+            { ...JumperEnemyImpl, x: 86 * tileSize, y: 7 * tileSize - 64 }
         );
 
         // Flyers (positioned in air)
         this.enemies.push(
             // First section
-            { ...FlyerEnemyImpl, x: 15 * tileSize, y: 7 * tileSize, initialY: 7 * tileSize, alive: true },
+            { ...FlyerEnemyImpl, x: 15 * tileSize, y: 7 * tileSize, initialY: 7 * tileSize },
             // Middle section
-            { ...FlyerEnemyImpl, x: 58 * tileSize, y: 7 * tileSize, initialY: 7 * tileSize, alive: true },
+            { ...FlyerEnemyImpl, x: 58 * tileSize, y: 7 * tileSize, initialY: 7 * tileSize },
             // Final section
-            { ...FlyerEnemyImpl, x: 114 * tileSize, y: 7 * tileSize, initialY: 7 * tileSize, alive: true }
+            { ...FlyerEnemyImpl, x: 114 * tileSize, y: 7 * tileSize, initialY: 7 * tileSize }
         );
 
         // Throwers (positioned directly on platforms)
         this.enemies.push(
             // First section
-            { ...ThrowerEnemyImpl, x: 30 * tileSize, y: 4 * tileSize - 64, alive: true },
+            { ...ThrowerEnemyImpl, x: 30 * tileSize, y: 4 * tileSize - 64 },
             // Middle section
-            { ...ThrowerEnemyImpl, x: 73 * tileSize, y: 4 * tileSize - 64, alive: true },
+            { ...ThrowerEnemyImpl, x: 73 * tileSize, y: 4 * tileSize - 64 },
             // Final section high platform
-            { ...ThrowerEnemyImpl, x: 92 * tileSize, y: 7 * tileSize - 64, alive: true },
+            { ...ThrowerEnemyImpl, x: 92 * tileSize, y: 7 * tileSize - 64 },
             // Final section
-            { ...ThrowerEnemyImpl, x: 127 * tileSize, y: 3 * tileSize - 64, alive: true }
+            { ...ThrowerEnemyImpl, x: 127 * tileSize, y: 3 * tileSize - 64 }
         );
     }
 }

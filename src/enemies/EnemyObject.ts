@@ -13,4 +13,5 @@ export interface EnemyObject extends GameObject {
     spritePath: string;
     velocityY: number;
     isGrounded: boolean;
+    detectionRange: number;
 }

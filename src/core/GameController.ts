@@ -121,9 +121,14 @@ export class GameController {
         this.platforms.forEach(platform => {
             if (collision(this.player, platform)) {
                 if (this.player.velocityY > 0) {
+                    // Player is falling and collides with platform from above
                     this.player.isGrounded = true;
                     this.player.velocityY = 0;
                     this.player.y = platform.y - this.player.height;
+                } else if (this.player.velocityY < 0) {
+                    // Player is jumping and collides with platform from below
+                    this.player.velocityY = 0;
+                    this.player.y = platform.y + platform.height;
                 }
             }
         });

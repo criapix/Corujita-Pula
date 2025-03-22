@@ -48,28 +48,28 @@ export class GameController {
     }
     
     // Main update function
-    public update(canvasWidth: number): void {
-        this.handlePlayerMovement();
+    public update(canvasWidth: number, deltaTime: number = 1/60): void {
+        this.handlePlayerMovement(deltaTime);
         this.handleFireball();
-        this.applyGravity();
+        this.applyGravity(deltaTime);
         this.checkPlatformCollisions();
         this.updateCamera(canvasWidth);
         this.checkWinCondition();
         this.checkEnemyCollisions();
         this.checkFallDeath();
-        this.updateEnemies();
-        this.updateProjectiles();
+        this.updateEnemies(deltaTime);
+        this.updateProjectiles(deltaTime);
     }
     
     // Handle player horizontal movement
-    private handlePlayerMovement(): void {
-        // Horizontal movement
+    private handlePlayerMovement(deltaTime: number = 1/60): void {
+        // Horizontal movement with deltaTime normalization
         if (this.keys.ArrowLeft) {
-            this.player.x -= this.player.speed;
+            this.player.x -= this.player.speed * 60 * deltaTime;
             this.lastDirection = -1; // Update last direction when moving left
         }
         if (this.keys.ArrowRight) {
-            this.player.x += this.player.speed;
+            this.player.x += this.player.speed * 60 * deltaTime;
             this.lastDirection = 1; // Update last direction when moving right
         }
 
@@ -110,9 +110,9 @@ export class GameController {
     }
     
     // Apply gravity to player
-    private applyGravity(): void {
-        this.player.velocityY += this.gravity;
-        this.player.y += this.player.velocityY;
+    private applyGravity(deltaTime: number = 1/60): void {
+        this.player.velocityY += this.gravity * 60 * deltaTime;
+        this.player.y += this.player.velocityY * 60 * deltaTime;
     }
     
     // Check collisions with platforms
@@ -214,22 +214,23 @@ export class GameController {
     }
     
     // Update all enemies
-    private updateEnemies(): void {
+    private updateEnemies(deltaTime: number = 1/60): void {
         for (const enemy of this.enemies) {
-            enemy.update(this.player, this.gravity);
+            enemy.update(this.player, this.gravity * 60 * deltaTime);
         }
     }
     
     // Update all projectiles
-    private updateProjectiles(): void {
+    private updateProjectiles(deltaTime: number = 1/60): void {
         updateProjectiles(
             GameController.projectiles,
             this.platforms,
             this.enemies,
             this.player,
-            this.gravity,
+            this.gravity * 60 * deltaTime,
             this.worldWidth,
-            this.cameraOffset
+            this.cameraOffset,
+            deltaTime
         );
     }
     

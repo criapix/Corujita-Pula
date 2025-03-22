@@ -20,7 +20,7 @@ export const FlyerEnemyImpl: FlyerEnemy = {
     frequency: 0.02, // Speed of oscillation
     initialY: 0,     // Starting Y position
     time: 0,         // Time counter for oscillation
-    update: function(player: Player, gravity: number): void {
+    update: function(player: Player, gravity: number, deltaTime: number = 1/60): void {
         // Skip update if enemy is dead
         if (!this.alive) return;
         
@@ -50,16 +50,16 @@ export const FlyerEnemyImpl: FlyerEnemy = {
             this.direction *= -1;
         }
         
-        // Move horizontally like walker
-        this.x += this.speed * this.direction;
+        // Move horizontally like walker with deltaTime normalization
+        this.x += this.speed * this.direction * 60 * deltaTime;
         
         // Reverse direction at walls or platform edges
         if (this.x <= 0 || this.x + this.width >= 5000) { // Using worldWidth value
             this.direction *= -1;
         }
         
-        // Oscillate vertically using sine wave
-        this.time += this.frequency;
+        // Oscillate vertically using sine wave with deltaTime normalization
+        this.time += this.frequency * 60 * deltaTime;
         this.y = this.initialY + Math.sin(this.time) * this.amplitude;
     }
 };

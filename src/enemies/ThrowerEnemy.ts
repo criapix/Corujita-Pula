@@ -25,7 +25,7 @@ export const ThrowerEnemyImpl: ThrowerEnemy = {
     throwRange: 400,    // Detection range for throwing
     velocityY: 0,
     isGrounded: false,
-    update: function(player: Player, gravity: number): void {
+    update: function(player: Player, gravity: number, deltaTime: number = 1/60): void {
         // Skip all updates if enemy is dead
         if (!this.alive) return;
         
@@ -89,7 +89,7 @@ export const ThrowerEnemyImpl: ThrowerEnemy = {
             this.direction *= -1;
         }
         
-        // Basic movement like walker
+        // Basic movement like walker with deltaTime normalization
         this.x += this.speed * this.direction;
         
         // Throw projectile when player is in range

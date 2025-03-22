@@ -17,11 +17,11 @@ export const WalkerEnemy: EnemyObject = {
     spritePath: 'assets/images/fox-svgrepo-com.svg',
     velocityY: 0,
     isGrounded: false,
-    update: function(player: Player, gravity: number): void {
+    update: function(player: Player, gravity: number, deltaTime: number = 1/60): void {
         // Skip update if enemy is dead
         if (!this.alive) return;
 
-        // Apply gravity
+        // Apply gravity with deltaTime normalization
         this.velocityY += gravity;
         this.y += this.velocityY;
 
@@ -124,7 +124,7 @@ export const WalkerEnemy: EnemyObject = {
             this.direction *= -1;
         }
 
-        // Move in current direction
+        // Move in current direction with deltaTime normalization
         this.x += this.speed * this.direction;
     }
 };

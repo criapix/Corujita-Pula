@@ -20,11 +20,11 @@ export const JumperEnemyImpl: JumperEnemy = {
     velocityY: 0,
     isGrounded: false,
     detectionRange: 300,
-    update: function(player: Player, gravity: number): void {
+    update: function(player: Player, gravity: number, deltaTime: number = 1/60): void {
         // Skip update if enemy is dead
         if (!this.alive) return;
         
-        // Apply gravity
+        // Apply gravity with deltaTime normalization
         this.velocityY += gravity;
         this.y += this.velocityY;
         
@@ -84,7 +84,7 @@ export const JumperEnemyImpl: JumperEnemy = {
             this.direction *= -1;
         }
         
-        // Basic movement like walker
+        // Basic movement like walker with deltaTime normalization
         this.x += this.speed * this.direction;
         
         // Jump when player is nearby and enemy is on ground

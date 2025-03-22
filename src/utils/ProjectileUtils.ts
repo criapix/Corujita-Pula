@@ -30,7 +30,7 @@ export function shootFireball(player: Player, projectiles: Projectile[], lastDir
 }
 
 // Update projectiles function
-export function updateProjectiles(projectiles: Projectile[], platforms: Platform[], enemies: EnemyObject[], player: Player, gravity: number, worldWidth: number, cameraOffset: number): void {
+export function updateProjectiles(projectiles: Projectile[], platforms: Platform[], enemies: EnemyObject[], player: Player, gravity: number, worldWidth: number, cameraOffset: number, deltaTime: number = 1/60): void {
     // Apply gravity and movement to projectiles
     for (let i = projectiles.length - 1; i >= 0; i--) {
         const projectile = projectiles[i];

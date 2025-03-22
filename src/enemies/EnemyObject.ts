@@ -8,7 +8,7 @@ export interface EnemyObject extends GameObject {
     speed: number;
     direction: number;
     type: EnemyType;
-    update: (player: Player, gravity: number) => void;
+    update: (player: Player, gravity: number, deltaTime?: number) => void;
     alive: boolean;
     spritePath: string;
     velocityY: number;

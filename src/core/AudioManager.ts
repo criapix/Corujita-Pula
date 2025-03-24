@@ -14,8 +14,25 @@ export class AudioManager {
     private constructor() {
         this.sounds = new Map<string, HTMLAudioElement>();
         this.loadSounds();
+        
+        // Adiciona listener para quando a aba ficar inativa/ativa
+        document.addEventListener('visibilitychange', this.handleVisibilityChange.bind(this));
     }
     
+    /**
+     * Gerencia a pausa/retomada da música quando a aba fica inativa/ativa
+     */
+    private handleVisibilityChange(): void {
+        if (document.hidden) {
+            // Aba está inativa, pausa a música
+            this.pauseBackgroundMusic();
+        } else {
+            // Aba está ativa novamente, retoma a música se estiver habilitada
+            if (this.musicEnabled) {
+                this.playBackgroundMusic();
+            }
+        }
+    }
     /**
      * Obtém a instância única do AudioManager (Singleton)
      */

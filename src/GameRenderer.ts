@@ -1,5 +1,5 @@
 import { Player } from './core/Player';
-import { Platform } from './Platform';
+import { Platform, BlockType } from './Platform';
 import { EnemyObject } from './enemies/EnemyObject';
 import { Projectile } from './Projectile';
 import { GameController } from './core/GameController';
@@ -108,19 +108,11 @@ export class GameRenderer {
             return;
         }
         
-        // Draw each platform with a border to make them more visible
+        // Draw each platform using its block's draw method
         platforms.forEach(platform => {
-            // Fill platform
-            this.ctx.fillStyle = '#2ecc71';
-            this.ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
-            
-            // Add border
-            this.ctx.strokeStyle = '#27ae60';
-            this.ctx.lineWidth = 2;
-            this.ctx.strokeRect(platform.x, platform.y, platform.width, platform.height);
+            // Use the block's draw method to render the platform
+            platform.block.draw(this.ctx);
         });
-        
-
     }
     
     // Draw all enemies (only if alive)

@@ -3,6 +3,7 @@ import { WalkerEnemy } from '../enemies/WalkerEnemy';
 import { JumperEnemyImpl } from '../enemies/JumperEnemy';
 import { FlyerEnemyImpl } from '../enemies/FlyerEnemy';
 import { ThrowerEnemyImpl } from '../enemies/ThrowerEnemy';
+import { BlockType } from '../Platform';
 
 /**
  * First stage implementation with specific terrain and enemy placement
@@ -18,28 +19,28 @@ export class Stage1 extends Stage {
      * using bottom-left corner coordinates and dimensions
      */
     protected createTerrain(): void {
-        // Main ground platforms with gaps
-        this.tileMap.addPlatformByCoordinates(0, 0, 20, 3);  // Starting platform
-        this.tileMap.addPlatformByCoordinates(25, 0, 15, 3); // Platform after first gap
-        this.tileMap.addPlatformByCoordinates(45, 0, 20, 3); // Platform after second gap
-        this.tileMap.addPlatformByCoordinates(70, 0, 25, 3); // Platform after third gap
+        // Main ground platforms with gaps - Grass on top, dirt below
+        this.tileMap.addPlatformByCoordinates(0, 0, 20, 3, BlockType.GRASS);  // Starting platform
+        this.tileMap.addPlatformByCoordinates(25, 0, 15, 3, BlockType.GRASS); // Platform after first gap
+        this.tileMap.addPlatformByCoordinates(45, 0, 20, 3, BlockType.GRASS); // Platform after second gap
+        this.tileMap.addPlatformByCoordinates(70, 0, 25, 3, BlockType.GRASS); // Platform after third gap
         
-        // Elevated platforms
-        this.tileMap.addPlatformByCoordinates(10, 5, 5, 1);  // Small elevated platform
-        this.tileMap.addPlatformByCoordinates(22, 7, 3, 1);  // Small floating platform
-        this.tileMap.addPlatformByCoordinates(30, 4, 8, 1);  // Medium elevated platform
-        this.tileMap.addPlatformByCoordinates(42, 6, 4, 1);  // Small floating platform
+        // Elevated platforms - Wood
+        this.tileMap.addPlatformByCoordinates(10, 5, 5, 1, BlockType.WOOD);  // Small elevated platform
+        this.tileMap.addPlatformByCoordinates(22, 7, 3, 1, BlockType.WOOD);  // Small floating platform
+        this.tileMap.addPlatformByCoordinates(30, 4, 8, 1, BlockType.WOOD);  // Medium elevated platform
+        this.tileMap.addPlatformByCoordinates(42, 6, 4, 1, BlockType.WOOD);  // Small floating platform
         
-        // Middle section platforms
-        this.tileMap.addPlatformByCoordinates(50, 3, 6, 1);  // Low platform
-        this.tileMap.addPlatformByCoordinates(60, 5, 7, 1);  // Medium platform
-        this.tileMap.addPlatformByCoordinates(55, 8, 4, 1);  // High platform
+        // Middle section platforms - Wood
+        this.tileMap.addPlatformByCoordinates(50, 3, 6, 1, BlockType.WOOD);  // Low platform
+        this.tileMap.addPlatformByCoordinates(60, 5, 7, 1, BlockType.WOOD);  // Medium platform
+        this.tileMap.addPlatformByCoordinates(55, 8, 4, 1, BlockType.WOOD);  // High platform
         
-        // Final section platforms
-        this.tileMap.addPlatformByCoordinates(75, 4, 10, 1); // Long elevated platform
-        this.tileMap.addPlatformByCoordinates(90, 7, 5, 1);  // High platform
-        this.tileMap.addPlatformByCoordinates(100, 5, 3, 1); // Small platform
-        this.tileMap.addPlatformByCoordinates(105, 3, 15, 1); // Final platform
+        // Final section platforms - Stone
+        this.tileMap.addPlatformByCoordinates(75, 4, 10, 1, BlockType.STONE); // Long elevated platform
+        this.tileMap.addPlatformByCoordinates(90, 7, 5, 1, BlockType.STONE);  // High platform
+        this.tileMap.addPlatformByCoordinates(100, 5, 3, 1, BlockType.STONE); // Small platform
+        this.tileMap.addPlatformByCoordinates(105, 3, 15, 1, BlockType.GRASS); // Final platform - Grass
     }
 
     /**

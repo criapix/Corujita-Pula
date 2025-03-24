@@ -1,5 +1,5 @@
 import { GameObject } from './core/GameObject';
-import { Platform } from './Platform';
+import { Platform, BlockType } from './Platform';
 
 // Class to manage a grid of 32x32 tiles
 export class TileMap {
@@ -35,7 +35,7 @@ export class TileMap {
     }
 
     // Add a tile at the specified grid position
-    public addTile(row: number, col: number): Platform | undefined {
+    public addTile(row: number, col: number, blockType: BlockType = BlockType.GRASS): Platform | undefined {
         if (row < 0 || row >= this.rows || col < 0 || col >= this.columns) {
             console.error(`Tile position out of bounds: (${row}, ${col})`);
             return undefined;
@@ -45,19 +45,19 @@ export class TileMap {
         // Invert y-coordinate so that y=0 is at the bottom of the screen
         const y = (this.rows - 1 - row) * this.tileSize;
 
-        const tile = new Platform(x, y, this.tileSize, this.tileSize);
+        const tile = new Platform(x, y, this.tileSize, this.tileSize, blockType);
         this.tiles[row][col] = tile;
 
         return tile;
     }
 
     // Add a horizontal platform starting at the specified grid position with given length
-    public addPlatform(row: number, startCol: number, length: number): Platform[] {
+    public addPlatform(row: number, startCol: number, length: number, blockType: BlockType = BlockType.GRASS): Platform[] {
         const platform: Platform[] = [];
 
         for (let col = startCol; col < startCol + length; col++) {
             if (col < this.columns) {
-                const tile = this.addTile(row, col);
+                const tile = this.addTile(row, col, blockType);
                 if (tile) {
                     platform.push(tile);
                 }
@@ -73,9 +73,10 @@ export class TileMap {
      * @param y The y-coordinate of the bottom-left corner of the platform (where y=0 is at the bottom)
      * @param width The width of the platform
      * @param height The height of the platform
+     * @param blockType The type of block to use for the platform
      * @returns Array of Platform objects created
      */
-    public addPlatformByCoordinates(x: number, y: number, width: number, height: number): Platform[] {
+    public addPlatformByCoordinates(x: number, y: number, width: number, height: number, blockType: BlockType = BlockType.GRASS): Platform[] {
         // Calculate the corresponding grid positions
         // Convert from bottom-left corner coordinates and dimensions to grid positions
         const startCol = x;
@@ -90,7 +91,7 @@ export class TileMap {
         for (let row = startRow; row <= endRow; row++) {
             for (let col = startCol; col <= endCol; col++) {
                 if (row >= 0 && row < this.rows && col >= 0 && col < this.columns) {
-                    const tile = this.addTile(row, col);
+                    const tile = this.addTile(row, col, blockType);
                     if (tile) {
                         platform.push(tile);
                     }

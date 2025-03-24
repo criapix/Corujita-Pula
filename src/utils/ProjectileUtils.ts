@@ -43,19 +43,27 @@ export function updateProjectiles(projectiles: Projectile[], platforms: Platform
         // Check for collisions with platforms
         for (const platform of platforms) {
             if (collision(projectile, platform)) {
+                // For fireballs, check if collision is on top of platform
                 if (projectile.isFireball) {
-                    // Bounce fireballs off platforms
-                    projectile.velocityY = -projectile.velocityY * 0.7;
-                    // Ensure fireball doesn't get stuck in platform
-                    projectile.y = platform.y - projectile.height;
-                    // Reduce horizontal velocity slightly on bounce
-                    projectile.velocityX *= 0.9;
-                    // Remove fireball if it's moving too slowly
-                    if (Math.abs(projectile.velocityX) < 1 && Math.abs(projectile.velocityY) < 1) {
+                    // Check if fireball is hitting the top of the platform
+                    if (projectile.velocityY > 0 && // Fireball is falling
+                        projectile.x + projectile.width > platform.x &&
+                        projectile.x < platform.x + platform.width &&
+                        projectile.y + projectile.height >= platform.y &&
+                        projectile.y + projectile.height <= platform.y + platform.height/2) {
+                        
+                        // Bounce the fireball
+                        projectile.velocityY = -projectile.velocityY * 0.7; // Reduce bounce height by 30%
+                        projectile.y = platform.y - projectile.height - 1; // Position above platform with small gap
+                        
+                        // Play bounce sound
+                        AudioManager.getInstance().playSound('platformLand');
+                    } else {
+                        // Side collision - remove the fireball
                         projectiles.splice(i, 1);
                     }
                 } else {
-                    // Regular enemy projectiles are removed on collision
+                    // For enemy projectiles, always remove on collision
                     projectiles.splice(i, 1);
                 }
                 break;

@@ -3,6 +3,7 @@ import { Platform } from '../Platform';
 import { Player } from '../core/Player';
 import { EnemyObject } from '../enemies/EnemyObject';
 import { collision } from './CollisionUtils';
+import { AudioManager } from '../core/AudioManager';
 
 // Function to shoot fireball
 export function shootFireball(player: Player, projectiles: Projectile[], lastDirection: number, lastFireballTime: number, fireballCooldown: number): number {
@@ -67,6 +68,9 @@ export function updateProjectiles(projectiles: Projectile[], platforms: Platform
                 if (enemy.alive && collision(projectile, enemy)) {
                     enemy.alive = false; // Kill the enemy
                     projectiles.splice(i, 1); // Remove the fireball
+                    
+                    // Reproduz som de inimigo eliminado
+                    AudioManager.getInstance().playSound('enemyDeath');
                     break;
                 }
             }

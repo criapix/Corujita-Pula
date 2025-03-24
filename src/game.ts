@@ -9,6 +9,7 @@ import { GameController } from './core/GameController';
 import { GameRenderer } from './GameRenderer';
 import { EnemyRegistry } from './core/EnemyRegistry';
 import { Stage1 } from './stages/Stage1';
+import { AudioInitializer } from './core/AudioInitializer';
 
 // Get canvas and context
 const canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
@@ -104,6 +105,9 @@ const enemyRegistry = EnemyRegistry.getInstance();
 
 // Start game when assets are loaded
 function startGame(): void {
+    // Inicializa o sistema de áudio
+    AudioInitializer.getInstance();
+    
     // Initialize controller and renderer
     gameController = new GameController(
         player,

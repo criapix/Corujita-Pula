@@ -5,6 +5,8 @@ import { Projectile } from '../Projectile';
 import { KeyState } from '../KeyState';
 import { collision, checkTopCollision } from '../utils/CollisionUtils';
 import { updateProjectiles, shootFireball } from '../utils/ProjectileUtils';
+import { AudioManager } from './AudioManager';
+import { AudioInitializer } from './AudioInitializer';
 
 // Class to handle game logic and updates
 export class GameController {
@@ -44,7 +46,13 @@ export class GameController {
         this.player.platforms = platforms;
         
         // Listen for playerHit event from projectiles
-        document.addEventListener('playerHit', () => this.resetGame());
+        document.addEventListener('playerHit', () => {
+            // Reproduz som de morte do jogador
+            AudioManager.getInstance().playSound('playerDeath');
+            this.resetGame();
+        });
+        
+        // Não inicia a música de fundo aqui - será iniciada pelo AudioInitializer após interação do usuário
     }
     
     // Main update function
@@ -63,9 +71,17 @@ export class GameController {
     
     // Variável para rastrear o estado anterior da tecla de pulo
     private jumpKeyPressed: boolean = false;
+    // Variável para rastrear se a música de fundo já foi iniciada
+    private backgroundMusicStarted: boolean = false;
     
     // Handle player horizontal movement
     private handlePlayerMovement(deltaTime: number = 1/60): void {
+        // Inicia a música de fundo após a primeira interação do usuário com o jogo
+        if (!this.backgroundMusicStarted && (this.keys.ArrowLeft || this.keys.ArrowRight || this.keys.ArrowUp)) {
+            AudioInitializer.getInstance().startBackgroundMusic();
+            this.backgroundMusicStarted = true;
+        }
+        
         // Horizontal movement with deltaTime normalization
         if (this.keys.ArrowLeft) {
             this.player.x -= this.player.speed * 60 * deltaTime;
@@ -99,11 +115,17 @@ export class GameController {
                 this.player.velocityY = this.player.jumpForce;
                 this.player.isGrounded = false;
                 this.player.canDoubleJump = true; // Habilita o pulo duplo quando sai do chão
+                
+                // Reproduz som de pulo
+                AudioManager.getInstance().playSound('jump');
             }
             // Pulo duplo quando estiver no ar e ainda não tiver usado o pulo duplo
             else if (this.player.canDoubleJump) {
                 this.player.velocityY = this.player.jumpForce * 0.8; // Força reduzida para o pulo duplo
                 this.player.canDoubleJump = false; // Desabilita o pulo duplo até tocar o chão novamente
+                
+                // Reproduz som de pulo duplo
+                AudioManager.getInstance().playSound('doubleJump');
             }
         } else if (!this.keys.ArrowUp) {
             // Tecla foi solta
@@ -117,6 +139,7 @@ export class GameController {
     // Handle fireball shooting
     private handleFireball(): void {
         if (this.keys[' ']) {
+            const previousFireballTime = this.lastFireballTime;
             this.lastFireballTime = shootFireball(
                 this.player, 
                 GameController.projectiles, 
@@ -124,6 +147,12 @@ export class GameController {
                 this.lastFireballTime, 
                 this.fireballCooldown
             );
+            
+            // Se o tempo foi atualizado, significa que uma bola de fogo foi disparada
+            if (previousFireballTime !== this.lastFireballTime) {
+                // Reproduz som de bola de fogo
+                AudioManager.getInstance().playSound('fireball');
+            }
         }
     }
     
@@ -135,12 +164,21 @@ export class GameController {
     
     // Check collisions with platforms
     private checkPlatformCollisions(): void {
+        const wasGrounded = this.player.isGrounded;
         this.player.isGrounded = false;
+        
         this.platforms.forEach(platform => {
             if (collision(this.player, platform)) {
                 if (this.player.velocityY > 0) {
                     // Player is falling and collides with platform from above
+                    const wasInAir = !wasGrounded;
                     this.player.isGrounded = true;
+                    
+                    // Se o jogador estava caindo com velocidade significativa, reproduz som de aterrissagem
+                    if (wasInAir && this.player.velocityY > 5) {
+                        AudioManager.getInstance().playSound('platformLand');
+                    }
+                    
                     this.player.velocityY = 0;
                     this.player.y = platform.y - this.player.height;
                     this.player.canDoubleJump = false; // Reseta o pulo duplo quando tocar o chão
@@ -177,6 +215,9 @@ export class GameController {
     // Check win condition
     private checkWinCondition(): void {
         if (this.player.x >= this.worldWidth - this.player.width) {
+            // Reproduz som de vitória
+            AudioManager.getInstance().playSound('win');
+            
             alert('Parabéns! Você completou a fase!');
             this.resetPlayerPosition();
             
@@ -195,8 +236,14 @@ export class GameController {
                 if (checkTopCollision(this.player, enemy)) {
                     enemy.alive = false; // Kill the enemy
                     this.player.velocityY = this.player.jumpForce * 0.7; // Bounce player up a bit
+                    
+                    // Reproduz som de inimigo eliminado
+                    AudioManager.getInstance().playSound('enemyDeath');
                 } else {
                     // Player collided with enemy from side or below
+                    
+                    // Reproduz som de morte do jogador
+                    AudioManager.getInstance().playSound('playerDeath');
                     this.resetGame(); // Reset the entire game state
                 }
             }
@@ -268,6 +315,10 @@ export class GameController {
         
         if (this.player.y > deathY) {
             // Player has fallen into a gap
+            
+            // Reproduz som de morte do jogador
+            AudioManager.getInstance().playSound('playerDeath');
+            
             this.resetGame();
         }
     }

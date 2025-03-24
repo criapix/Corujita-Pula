@@ -200,11 +200,16 @@ export class GameController {
         
         // Camera follows player when they move beyond the center point
         if (this.player.x > this.cameraOffset + cameraEdge) {
+            // Move camera right when player moves beyond right edge
             this.cameraOffset = this.player.x - cameraEdge;
+        } else if (this.player.x < this.cameraOffset + cameraEdge / 2) {
+            // Move camera left when player moves beyond left edge (using half the edge distance)
+            this.cameraOffset = this.player.x - cameraEdge / 2;
         }
         
         // Ensure camera stays within world boundaries
         this.cameraOffset = Math.max(0, Math.min(this.worldWidth - visibleWidth, this.cameraOffset));
+
     }
     
     // Get camera offset

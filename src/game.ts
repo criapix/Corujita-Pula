@@ -124,7 +124,7 @@ function startGame(): void {
     );
     
     // Start game loop
-    gameLoop();
+    requestAnimationFrame(gameLoop);
 }
 
 // Asset loading
@@ -149,16 +149,27 @@ function calculateScaleFactors(): { scaleX: number, scaleY: number } {
     };
 }
 
+// Variables for deltaTime calculation
+let lastFrameTime: number = 0;
+
 // Main game loop
-function gameLoop(): void {
+function gameLoop(timestamp: number): void {
+    // Calculate deltaTime in seconds
+    const currentTime = timestamp || performance.now();
+    const deltaTime = lastFrameTime ? (currentTime - lastFrameTime) / 1000 : 1/60; // Convert to seconds, default to 1/60 on first frame
+    lastFrameTime = currentTime;
+    
+    // Limit deltaTime to prevent large jumps after tab switch or lag
+    const cappedDeltaTime = Math.min(deltaTime, 0.1); // Cap at 100ms to prevent extreme jumps
+    
     // Update scale factors
     const { scaleX: currentScaleX, scaleY: currentScaleY } = calculateScaleFactors();
     scaleX = currentScaleX;
     scaleY = currentScaleY;
     
     if (gameController) {
-        // Update game state with scaled canvas width
-        gameController.update(canvas.width / scaleX);
+        // Update game state with scaled canvas width and real deltaTime
+        gameController.update(canvas.width / scaleX, cappedDeltaTime);
         
         // Render game
         if (gameRenderer) {

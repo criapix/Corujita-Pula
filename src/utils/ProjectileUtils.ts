@@ -35,9 +35,9 @@ export function updateProjectiles(projectiles: Projectile[], platforms: Platform
     for (let i = projectiles.length - 1; i >= 0; i--) {
         const projectile = projectiles[i];
         
-        projectile.x += projectile.velocityX;
+        projectile.x += projectile.velocityX * 60 * deltaTime; // Normalizar com deltaTime
         projectile.velocityY += gravity * 0.5; // Less gravity than player
-        projectile.y += projectile.velocityY;
+        projectile.y += projectile.velocityY * 60 * deltaTime; // Normalizar com deltaTime
         
         // Check for collisions with platforms
         for (const platform of platforms) {

@@ -8,6 +8,7 @@ export interface Player extends GameObject {
     jumpForce: number;
     velocityY: number;
     isGrounded: boolean;
+    canDoubleJump: boolean; // Indica se o jogador pode fazer um pulo duplo
     platforms?: Platform[];
     enemies?: EnemyObject[];
 }

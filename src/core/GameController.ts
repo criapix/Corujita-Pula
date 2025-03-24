@@ -61,6 +61,9 @@ export class GameController {
         this.updateProjectiles(deltaTime);
     }
     
+    // Variável para rastrear o estado anterior da tecla de pulo
+    private jumpKeyPressed: boolean = false;
+    
     // Handle player horizontal movement
     private handlePlayerMovement(deltaTime: number = 1/60): void {
         // Horizontal movement with deltaTime normalization
@@ -86,10 +89,25 @@ export class GameController {
             }
         }
 
-        // Handle jump
-        if (this.keys.ArrowUp && this.player.isGrounded) {
-            this.player.velocityY = this.player.jumpForce;
-            this.player.isGrounded = false;
+        // Handle jump with key press/release detection
+        if (this.keys.ArrowUp && !this.jumpKeyPressed) {
+            // Tecla acabou de ser pressionada
+            this.jumpKeyPressed = true;
+            
+            // Pulo normal quando estiver no chão
+            if (this.player.isGrounded) {
+                this.player.velocityY = this.player.jumpForce;
+                this.player.isGrounded = false;
+                this.player.canDoubleJump = true; // Habilita o pulo duplo quando sai do chão
+            }
+            // Pulo duplo quando estiver no ar e ainda não tiver usado o pulo duplo
+            else if (this.player.canDoubleJump) {
+                this.player.velocityY = this.player.jumpForce * 0.8; // Força reduzida para o pulo duplo
+                this.player.canDoubleJump = false; // Desabilita o pulo duplo até tocar o chão novamente
+            }
+        } else if (!this.keys.ArrowUp) {
+            // Tecla foi solta
+            this.jumpKeyPressed = false;
         }
         
         // Movement boundaries
@@ -125,6 +143,7 @@ export class GameController {
                     this.player.isGrounded = true;
                     this.player.velocityY = 0;
                     this.player.y = platform.y - this.player.height;
+                    this.player.canDoubleJump = false; // Reseta o pulo duplo quando tocar o chão
                 } else if (this.player.velocityY < 0) {
                     // Player is jumping and collides with platform from below
                     this.player.velocityY = 0;
@@ -188,6 +207,7 @@ export class GameController {
     private resetPlayerPosition(): void {
         this.player.x = 50;
         this.player.y = 100;
+        this.player.canDoubleJump = false; // Reseta o pulo duplo
         this.cameraOffset = 0;
     }
     

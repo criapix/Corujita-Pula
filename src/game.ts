@@ -78,7 +78,8 @@ const player: Player = {
     speed: 5,
     jumpForce: -15,
     velocityY: 0,
-    isGrounded: false
+    isGrounded: false,
+    canDoubleJump: false // Inicialmente não pode fazer pulo duplo até que esteja no ar
 };
 
 // Get platforms and enemies from the stage

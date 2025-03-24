@@ -88,13 +88,13 @@ export class Stage1 extends Stage {
         // Throwers (positioned directly on platforms)
         this.enemies.push(
             // First section
-            { ...ThrowerEnemyImpl, x: 30 * tileSize, y: 4 * tileSize - 64 },
+            { ...ThrowerEnemyImpl, x: 30 * tileSize, y: 4 * tileSize },
             // Middle section
-            { ...ThrowerEnemyImpl, x: 73 * tileSize, y: 4 * tileSize - 64 },
+            { ...ThrowerEnemyImpl, x: 73 * tileSize, y: 4 * tileSize },
             // Final section high platform
-            { ...ThrowerEnemyImpl, x: 92 * tileSize, y: 7 * tileSize - 64 },
+            { ...ThrowerEnemyImpl, x: 92 * tileSize, y: 7 * tileSize },
             // Final section
-            { ...ThrowerEnemyImpl, x: 127 * tileSize, y: 3 * tileSize - 64 }
+            { ...ThrowerEnemyImpl, x: 127 * tileSize, y: 3 * tileSize }
         );
     }
 }

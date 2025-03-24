@@ -92,19 +92,6 @@ export class GameController {
             this.lastDirection = 1; // Update last direction when moving right
         }
 
-        // Check for platform collisions
-        for (const platform of this.platforms) {
-            if (this.player.x + this.player.width > platform.x &&
-                this.player.x < platform.x + platform.width &&
-                this.player.y + this.player.height > platform.y &&
-                this.player.y < platform.y + platform.height) {
-                // Prevent player from passing through platforms
-                this.player.y = platform.y - this.player.height;
-                this.player.velocityY = 0;
-                this.player.isGrounded = true;
-            }
-        }
-
         // Handle jump with key press/release detection
         if (this.keys.ArrowUp && !this.jumpKeyPressed) {
             // Tecla acabou de ser pressionada
@@ -162,30 +149,72 @@ export class GameController {
         this.player.y += this.player.velocityY * 60 * deltaTime;
     }
     
+    // Variáveis para controlar o bloqueio de movimento horizontal após colisão lateral
+    private blockLeftMovement: boolean = false;
+    private blockRightMovement: boolean = false;
+    
     // Check collisions with platforms
     private checkPlatformCollisions(): void {
         const wasGrounded = this.player.isGrounded;
         this.player.isGrounded = false;
         
+        // Reset movement blocks at the beginning of each frame
+        this.blockLeftMovement = false;
+        this.blockRightMovement = false;
+        
         this.platforms.forEach(platform => {
             if (collision(this.player, platform)) {
-                if (this.player.velocityY > 0) {
-                    // Player is falling and collides with platform from above
-                    const wasInAir = !wasGrounded;
-                    this.player.isGrounded = true;
-                    
-                    // Se o jogador estava caindo com velocidade significativa, reproduz som de aterrissagem
-                    if (wasInAir && this.player.velocityY > 5) {
-                        AudioManager.getInstance().playSound('platformLand');
+                // Calculate overlap on each axis
+                const overlapX = Math.min(this.player.x + this.player.width, platform.x + platform.width) - 
+                                Math.max(this.player.x, platform.x);
+                const overlapY = Math.min(this.player.y + this.player.height, platform.y + platform.height) - 
+                                Math.max(this.player.y, platform.y);
+                
+                // Determine collision direction by comparing player's position relative to platform center
+                const playerCenterY = this.player.y + this.player.height / 2;
+                const platformCenterY = platform.y + platform.height / 2;
+                const comingFromTop = playerCenterY < platformCenterY;
+                
+                // Determine if collision is more horizontal or vertical
+                if (overlapX < overlapY) {
+                    // Horizontal collision (side of platform)
+                    if (this.player.x < platform.x) {
+                        // Collision from left side
+                        this.player.x = platform.x - this.player.width;
+                        // Block movement to the right when colliding from left
+                        this.blockRightMovement = true;
+                    } else {
+                        // Collision from right side
+                        this.player.x = platform.x + platform.width;
+                        // Block movement to the left when colliding from right
+                        this.blockLeftMovement = true;
                     }
                     
-                    this.player.velocityY = 0;
-                    this.player.y = platform.y - this.player.height;
-                    this.player.canDoubleJump = false; // Reseta o pulo duplo quando tocar o chão
-                } else if (this.player.velocityY < 0) {
-                    // Player is jumping and collides with platform from below
-                    this.player.velocityY = 0;
-                    this.player.y = platform.y + platform.height;
+                    // Aplicar uma pequena força de repulsão vertical para evitar que o jogador fique preso na lateral
+                    if (!this.player.isGrounded && this.player.velocityY > 0) {
+                        // Se estiver caindo, continua caindo
+                        this.player.velocityY = Math.max(this.player.velocityY, 1);
+                    }
+                } else {
+                    // Vertical collision
+                    if (comingFromTop && this.player.velocityY >= 0) {
+                        // Player is falling and collides with platform from above
+                        const wasInAir = !wasGrounded;
+                        this.player.isGrounded = true;
+                        
+                        // Se o jogador estava caindo com velocidade significativa, reproduz som de aterrissagem
+                        if (wasInAir && this.player.velocityY > 5) {
+                            AudioManager.getInstance().playSound('platformLand');
+                        }
+                        
+                        this.player.velocityY = 0;
+                        this.player.y = platform.y - this.player.height;
+                        this.player.canDoubleJump = false; // Reseta o pulo duplo quando tocar o chão
+                    } else if (!comingFromTop && this.player.velocityY < 0) {
+                        // Player is jumping and collides with platform from below
+                        this.player.velocityY = 0;
+                        this.player.y = platform.y + platform.height;
+                    }
                 }
             }
         });

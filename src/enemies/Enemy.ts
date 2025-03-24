@@ -1,5 +1,4 @@
 import { Platform } from '../Platform';
-import { collision } from '../utils/CollisionUtils';
 
 export abstract class Enemy {
     protected x: number = 0;

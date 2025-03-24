@@ -58,6 +58,20 @@ export function updateProjectiles(projectiles: Projectile[], platforms: Platform
                         
                         // Play bounce sound
                         AudioManager.getInstance().playSound('platformLand');
+                    } 
+                    // Check if fireball is hitting the bottom of the platform
+                    else if (projectile.velocityY < 0 && // Fireball is moving upward
+                        projectile.x + projectile.width > platform.x &&
+                        projectile.x < platform.x + platform.width &&
+                        projectile.y <= platform.y + platform.height &&
+                        projectile.y >= platform.y + platform.height/2) {
+                        
+                        // Bounce the fireball downward
+                        projectile.velocityY = -projectile.velocityY * 0.7; // Reverse and reduce velocity
+                        projectile.y = platform.y + platform.height + 1; // Position below platform with small gap
+                        
+                        // Play bounce sound
+                        AudioManager.getInstance().playSound('platformLand');
                     } else {
                         // Side collision - remove the fireball
                         projectiles.splice(i, 1);
